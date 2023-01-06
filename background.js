@@ -2,6 +2,7 @@ const productive_sites = [ "canvas.com" ];
 const unproductive_sites = [ "twitter.com" ];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
+// let prev_date = null;
 
 function isProductiveSite(site) {
     let res = productive_sites.filter(item => item.match(site) != null);
@@ -42,6 +43,7 @@ function timeCalculator(in_time, out_time){
   let time_spent = start_time - end_time; //time spent in minutes
   return time_spent;
 }
+
 function updateTime(time_spent, site){
   if (true){
     prod_time += time_spent;
@@ -49,10 +51,10 @@ function updateTime(time_spent, site){
   else {unprod_time += s}
   
 }
+
 function promptTimeType(){
 
 }
-
 
 /*
 if in prod_sites then add to prod_time
@@ -64,3 +66,22 @@ new Date();
 
 
 */
+
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//     console.log("tab updated");
+//     console.log(tabId);
+//     console.log(changeInfo);
+//     console.log(tab.url);
+//     console.log(Date());
+
+//     let new_date = Date();
+//     // if (prev_date == null) {
+//     //     console.log(timeCalculator(prev_date, new_date));
+//     // }
+//     // prev_date = new_date;
+// });
+
+// chrome.tabs.onCreated.addListener(function(tab) {         
+//     console.log("new tab opened");
+//     console.log(tab);
+// });
