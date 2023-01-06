@@ -6,12 +6,8 @@ chrome.runtime.onInstalled.addListener(() => {
   startTimer();
 });
 
-
-
-
-
-const productive_sites = ["*canvas.com", "*gmail.com"];
-const unproductive_sites = ["*twitter.com"];
+const productive_sites = ["canvas", "mail"];
+const unproductive_sites = ["twitter.com"];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
 let prev_date = null;
@@ -23,6 +19,9 @@ let time_spent = 0;
 
 async function update() {
   let temp_site = await getTab();
+  if (temp_site == null) {
+    return;
+  }
   console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
@@ -32,14 +31,15 @@ async function update() {
     start_time = end_time;
     console.log("unprod_time = " + unprod_time);
     console.log("prod_time = " + prod_time);
-
   }
-
 }
 
 //need to check if has url
 function isProductiveSite(site) {
-  let res = productive_sites.filter(item => item.match(site) != null);
+  if (site == null) {
+    return false;
+  }
+  let res = productive_sites.filter(item => site.match(item) != null);
   return res.length > 0;
 }
 
@@ -69,12 +69,18 @@ function removeSite(site, productive) {
   }
 }
 
-// console.log(productiveSite("canvas.com"));
-
 function timeCalculator(in_time, out_time) {
-  let start_time = in_time.getHours() * 60 + in_time.getMinutes() + in_time.getSeconds(); //change units later
-  let end_time = out_time.getHours() * 60 + out_time.getMinutes() + out_time.getSeconds(); //change units later
-  let time_spent = start_time - end_time; //time spent in minutes
+  let sh = in_time.getHours();
+  let sm = in_time.getMinutes();
+  let ss = in_time.getSeconds();
+  let eh = out_time.getHours();
+  let em = out_time.getMinutes();
+  let es = out_time.getSeconds();
+
+  diffh = eh - sh;
+  diffm = em - sm;
+  diffs = es - ss;
+  let time_spent = diffh * 3600 + diffm * 60 + diffs
   return time_spent;
 }
 
@@ -133,16 +139,11 @@ new Date();
 async function getTab() {
   let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   let url = tabs[0].url;
-  //console.log(tabs);
-  //console.log(url);
-  //console.log("unprod_time = " + unprod_time);
   // use `url` here inside the callback because it's asynchronous!
   return url;
 }
-
 
 function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
-//function getTab() { console.log("timer timed") }
