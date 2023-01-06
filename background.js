@@ -1,60 +1,93 @@
-const productive_sites = [ "canvas.com" ];
-const unproductive_sites = [ "twitter.com" ];
+//service worker, can listen to events
+
+chrome.runtime.onInstalled.addListener(() => {
+  start_time = new Date();
+
+  startTimer();
+});
+
+
+
+
+
+const productive_sites = ["*canvas.com"];
+const unproductive_sites = ["*twitter.com"];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
 let prev_date = null;
+let curr_site = null;
+let temp_site = null;
+let start_time = null;
+let end_time = null;
+let time_spent = 0;
 
+async function update() {
+  let temp_site = await getTab();
+  console.log("hellox" + temp_site);
+  if (curr_site != temp_site) {
+    end_time = new Date();
+    time_spent = timeCalculator(start_time, end_time);
+    updateTime(time_spent, isProductiveSite(curr_site));
+    curr_site = temp_site;
+    start_time = end_time;
+    console.log("unprod_time = " + unprod_time);
+
+  }
+
+}
+
+//need to check if has url
 function isProductiveSite(site) {
-    let res = productive_sites.filter(item => item.match(site) != null);
-    return res.length > 0;
+  let res = productive_sites.filter(item => item.match(site) != null);
+  return res.length > 0;
 }
 
 function addSite(site, productive) {
-    // match www something com
-    if (!site.match("www.*com")) {
-        return;
-    }
+  // match www something com
+  if (!site.match("www.*com")) {
+    return;
+  }
 
-    let domain = site.substring(site.indexOf("www") + 4, site.indexOf("com") + 3);
-    if (productive) {
-        productive_sites.push(domain);
-    } else {
-        unproductive_sites.push(domain);
-    }
+  let domain = site.substring(site.indexOf("www") + 4, site.indexOf("com") + 3);
+  if (productive) {
+    productive_sites.push(domain);
+  } else {
+    unproductive_sites.push(domain);
+  }
 }
 
 function removeSite(site, productive) {
-    if (!site.match("www.*com")) {
-        return;
-    }
+  if (!site.match("www.*com")) {
+    return;
+  }
 
-    if (productive) {
-        productive_sites = productive_sites.filter(item => item.match(site) == null);
-    } else {
-        unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
-    }
+  if (productive) {
+    productive_sites = productive_sites.filter(item => item.match(site) == null);
+  } else {
+    unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
+  }
 }
 
 // console.log(productiveSite("canvas.com"));
 
-function timeCalculator(in_time, out_time){
-  let start_time = in_time.getHours()*60 + in_time.getMinutes();
-  let end_time = out_time.getHours()*60 + out_time.getMinutes();
+function timeCalculator(in_time, out_time) {
+  let start_time = in_time.getHours() * 60 + in_time.getMinutes() + in_time.getSeconds(); //change units later
+  let end_time = out_time.getHours() * 60 + out_time.getMinutes() + out_time.getSeconds(); //change units later
   let time_spent = start_time - end_time; //time spent in minutes
   return time_spent;
 }
 
-function updateTime(time_spent, is_prod){
-    if (is_prod) {
-        prod_time += time_spent;
-    }
-    else {
-        unprod_time += time_spent
-    }
+function updateTime(time_spent, is_prod) {
+  if (is_prod) {
+    prod_time += time_spent;
+  }
+  else {
+    unprod_time += time_spent;
+  }
 }
-  
 
-function promptTimeType(){
+
+function promptTimeType() {
 
 }
 
@@ -96,16 +129,19 @@ new Date();
 // });
 
 // check current tab repeatedly
-// function getTab() {
-//     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-//         let url = tabs[0].url;
-//         console.log(tabs);
-//         console.log(url);
-//         // use `url` here inside the callback because it's asynchronous!
-//     });
-// }
+async function getTab() {
+  let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+  let url = tabs[0].url;
+  //console.log(tabs);
+  console.log(url);
+  console.log("unprod_time = " + unprod_time);
+  // use `url` here inside the callback because it's asynchronous!
+  return url;
+}
 
-// function startTimer() {
-//     console.log("start timer");
-//     setInterval(getTab, 1000);
-// }
+
+function startTimer() {
+  console.log("start timer");
+  setInterval(update, 1000);
+}
+//function getTab() { console.log("timer timed") }

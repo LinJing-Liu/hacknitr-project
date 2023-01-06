@@ -9,7 +9,10 @@
             "js": [
                 "content.js"
             ],
-            "matches": ["http://www.google.com/*"]
+            "matches": [
+                "http://www.google.com/*",
+                "https://*/*"
+            ]
         }
     ],
     "background": {
