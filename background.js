@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 
 
-const productive_sites = ["*canvas.com"];
+const productive_sites = ["*canvas.com", "*gmail.com"];
 const unproductive_sites = ["*twitter.com"];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
@@ -23,7 +23,7 @@ let time_spent = 0;
 
 async function update() {
   let temp_site = await getTab();
-  console.log("hellox" + temp_site);
+  console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
@@ -31,6 +31,7 @@ async function update() {
     curr_site = temp_site;
     start_time = end_time;
     console.log("unprod_time = " + unprod_time);
+    console.log("prod_time = " + prod_time);
 
   }
 
@@ -133,8 +134,8 @@ async function getTab() {
   let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   let url = tabs[0].url;
   //console.log(tabs);
-  console.log(url);
-  console.log("unprod_time = " + unprod_time);
+  //console.log(url);
+  //console.log("unprod_time = " + unprod_time);
   // use `url` here inside the callback because it's asynchronous!
   return url;
 }
