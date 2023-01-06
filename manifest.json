@@ -11,5 +11,23 @@
             ],
             "matches": []
         }
-    ]
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_icon": {}
+    },
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+U",
+                "mac": "Command+U"
+            }
+        }
+    }
 }
