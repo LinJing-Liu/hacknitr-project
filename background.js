@@ -2,7 +2,7 @@ const productive_sites = [ "canvas.com" ];
 const unproductive_sites = [ "twitter.com" ];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
-// let prev_date = null;
+let prev_date = null;
 
 function isProductiveSite(site) {
     let res = productive_sites.filter(item => item.match(site) != null);
@@ -44,13 +44,15 @@ function timeCalculator(in_time, out_time){
   return time_spent;
 }
 
-function updateTime(time_spent, site){
-  if (true){
-    prod_time += time_spent;
-  }
-  else {unprod_time += s}
-  
+function updateTime(time_spent, is_prod){
+    if (is_prod) {
+        prod_time += time_spent;
+    }
+    else {
+        unprod_time += time_spent
+    }
 }
+  
 
 function promptTimeType(){
 
@@ -75,13 +77,35 @@ new Date();
 //     console.log(Date());
 
 //     let new_date = Date();
-//     // if (prev_date == null) {
-//     //     console.log(timeCalculator(prev_date, new_date));
-//     // }
-//     // prev_date = new_date;
+//     if (!(prev_date == null)) {
+//         console.log(timeCalculator(prev_date, new_date));
+//     }
+//     prev_date = new_date;
 // });
 
 // chrome.tabs.onCreated.addListener(function(tab) {         
 //     console.log("new tab opened");
 //     console.log(tab);
+//     console.log(Date());
+
+//     let new_date = Date();
+//     if (!(prev_date == null)) {
+//         console.log(timeCalculator(prev_date, new_date));
+//     }
+//     prev_date = new_date;
 // });
+
+// check current tab repeatedly
+// function getTab() {
+//     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+//         let url = tabs[0].url;
+//         console.log(tabs);
+//         console.log(url);
+//         // use `url` here inside the callback because it's asynchronous!
+//     });
+// }
+
+// function startTimer() {
+//     console.log("start timer");
+//     setInterval(getTab, 1000);
+// }
