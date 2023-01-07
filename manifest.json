@@ -7,20 +7,27 @@
     "content_scripts": [
         {
             "js": [
-                "scripts/content.js"
+                "content.js"
             ],
-            "matches": []
+            "matches": [
+                "http://www.google.com/*",
+                "https://*/*"
+            ]
         }
     ],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background.js",
+        "type": "module"
     },
     "action": {
-        "default_icon": {}
+        "default_icon": {},
+        "default_popup": "type_popup.html"
     },
     "permissions": [
         "activeTab",
-        "scripting"
+        "scripting",
+        "tabs",
+        "storage"
     ],
     "commands": {
         "_execute_action": {
