@@ -5,12 +5,13 @@ chrome.runtime.onInstalled.addListener(() => {
   startTimer();
 });
 
+
 const productive_sites = ["canvas", "mail", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
 const unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
   "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
-let prod_time = 0; //minutes
-let unprod_time = 0; //minutes
+let prod_time = 0; //seconds
+let unprod_time = 0; //seconds
 let prev_date = null;
 let curr_site = null;
 let temp_site = null;
@@ -19,13 +20,17 @@ let end_time = null;
 let time_spent = 0;
 let prod_mult_factor = 1;
 let unprod_mult_factor = 1;
-//var deficit_event = new CustomEvent("deficit", { "detail": "when spent too much unprod time" });
+let gen_event_target = new EventTarget();
+const deficit_event = new Event("deficit");
+
+gen_event_target.addEventListener('deficit', () => { console.log("deficit event triggered"); window.alert("Deficit event"); }, false);
+
 
 // setting the values initially
-chrome.storage.local.set({ prodTime : prod_time })
-chrome.storage.local.set({ unprodTime : unprod_time })
-chrome.storage.local.set({ prodSites : productive_sites })
-chrome.storage.local.set({ unprodSites : unproductive_sites })
+chrome.storage.local.set({ prodTime: prod_time })
+chrome.storage.local.set({ unprodTime: unprod_time })
+chrome.storage.local.set({ prodSites: productive_sites })
+chrome.storage.local.set({ unprodSites: unproductive_sites })
 
 async function update() {
 
@@ -44,21 +49,18 @@ async function update() {
     start_time = end_time;
     console.log("unprod_time = " + unprod_time);
     console.log("prod_time = " + prod_time);
+    deficit();
   }
 }
+function deficit() {
+  console.log("points (called in deficit) = " + points());
+  if (points() <= 0) {
+    console.log("if loop points<=0");
+    gen_event_target.dispatchEvent(deficit_event);
+    console.log("event dispatched");
 
-/*
-if (points() <= 0) {
-  document.dispatchEvent(deficit_event);
-  // Create the event
-
-
-  // Dispatch/Trigger/Fire the event
-
+  }
 }
-*/
-
-
 
 function points() {
   let points = prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
@@ -125,11 +127,11 @@ function updateTime(time_spent, is_prod) {
     unprod_time += time_spent;
   }
 
-  chrome.storage.local.set({ prodTime : prod_time }).then(() => {
+  chrome.storage.local.set({ prodTime: prod_time }).then(() => {
     console.log("Prod time is set to: " + prod_time);
   });
 
-  chrome.storage.local.set({ unprodTime : unprod_time }).then(() => {
+  chrome.storage.local.set({ unprodTime: unprod_time }).then(() => {
     console.log("Unprod time is set to: " + unprod_time);
   });
 }
@@ -153,7 +155,7 @@ new Date();
 // check current tab repeatedly
 async function getTab() {
   let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
-  
+
   if (tabs == null || tabs.length < 1) {
     return;
   }
