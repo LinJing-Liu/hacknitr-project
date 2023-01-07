@@ -112,12 +112,12 @@ function addSite(site, productive) {
   let domain = site.substring(site.indexOf("www") + 4, site.indexOf("com") + 3);
   if (productive) {
     productive_sites.push(domain);
-    chrome.storage.local.set({ prodSites : productive_sites }).then(() => {
+    chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
       console.log("Prod sites is set to: " + productive_sites);
     });
   } else {
     unproductive_sites.push(domain);
-    chrome.storage.local.set({ unprodSites : unproductive_sites }).then(() => {
+    chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
       console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
@@ -130,12 +130,12 @@ function removeSite(site, productive) {
 
   if (productive) {
     productive_sites = productive_sites.filter(item => item.match(site) == null);
-    chrome.storage.local.set({ prodSites : productive_sites }).then(() => {
+    chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
       console.log("Prod sites is set to: " + productive_sites);
     });
   } else {
     unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
-    chrome.storage.local.set({ unprodSites : unproductive_sites }).then(() => {
+    chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
       console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
