@@ -190,4 +190,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    var addCancelButton = document.getElementById("addCancelButton");
+    addCancelButton.addEventListener('click', function() {
+        siteDomain = "";
+        siteProductive = false;
+        addSiteDomain.value = "";
+        addProdSelection.checked = false;
+        addSection.style.display = "none";
+        addSiteButton.style.display = "inline";
+    });
 });
