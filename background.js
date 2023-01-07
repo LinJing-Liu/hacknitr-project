@@ -23,7 +23,23 @@ let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 
-gen_event_target.addEventListener('deficit', () => { console.log("deficit event triggered"); window.alert("Deficit event"); }, false);
+
+
+gen_event_target.addEventListener('deficit', async () => {
+  console.log("deficit event triggered");
+
+
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "start" });
+  // do something with response here, not outside the function
+  console.log(response);
+
+
+
+  // chrome.runtime.sendMessage('start'); /*alert("Deficit event");*/
+}, false);
+
+
 
 
 // setting the values initially
@@ -63,7 +79,7 @@ function deficit() {
 }
 
 function points() {
-  let points = prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
+  let points = 5 + prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
   return points;
 }
 
