@@ -15,14 +15,45 @@
             font-size: 25px;
             text-align: center;
             color: black;
+            margin-bottom:0px;
         }
-
 
         h2 {
             font-size: 20px;
             text-align: left;
         }
 
+       /* .TimerStart{
+            display:grid;
+            grid-template-rows:1fr;
+            grid-template-columns:1fr 1fr;
+            margin-bottom:10%;
+            gap : 30px;
+        }*/
+
+        .recordButton{
+            /*grid-column:1;*/
+           display:inline;
+           position:relative;
+           width:50px;
+
+           
+        }
+
+        .timericon{
+            position:relative;
+           /* grid-column:2;*/
+            margin-top:5%;
+            top:50%;
+            
+        }
+        .report{
+            display:block;
+            margin-top : 5px;
+            position : relative;
+            left : 160px
+
+        }
         .trashImg {
             max-width: 20px;
             vertical-align: middle;
@@ -63,26 +94,77 @@
             display: table;
             clear: both;
         }
+
+        .moneySection{
+            display: grid;
+            position: relative;
+            grid-template-rows: 50px;
+            grid-template-columns:1fr 1fr;
+            gap: 10px;
+            bottom: 45px;
+        }
+
+        .piggybank {
+            position:relative;
+            z-index: 5;
+        }
+
+        #amtofmoney {
+            display: inline;
+           position: relative; 
+           top: 80px;
+           left : 310px;
+           z-index: 1;
+        }
+
+        .pig {
+            position:relative;
+            grid-column: 2;
+            z-index:0;
+        }
+
+        #Shop {
+            grid-column:1;
+            margin-top:30px;
+            height: 50px;
+        }
+
+
+    
+
     </style>
 </head>
 
 <body>
     <h1>Motivation Tracker</h1>
-    <p class="timelabel">Time on productive sites:
-        <span id="prod-time"></span>
-    </p>
-    <p class="timelabel">Time on unproductive sites:
-        <span id="unprod-time"></span>
-    </p>
-
+    <div class="TimerStart">
+    <img class="timericon" src="images/popuptimer.png">
     <button type="button" id="recordButton">
-        <span id="recordButtonText">Start</span>
+        <span id="recordButtonText">Start Timer</span>
     </button>
+    </div>
 
-    <button type="button" id="addSiteButton">Add Site</button>
-    
+    <div class="reportSummary">
+        <h3>Time Summary</h3>
+        <p class="timelabel">Time on productive sites:
+        <span id="prod-time"></span> secs</p>
+        <p class="timelabel">Time on unproductive sites:
+        <span id="unprod-time"></span> secs</p>
+        <button class ="report" type="button">View Full Report </button>
+    </div>
+
+
+    <h2 class="piggybank">Your productive piggybank, Mr.Baconstrip</h2>
+    <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.Baconstrip. </p>
+    <p id="amtofmoney">$00.00</p>
+    <div class="moneySection">
+        <img class="pig" src="images/pig.png">
+        <button type="button" id="Shop">Shop</button>
+    </div>
+
+    <h2>Add a site to your list</h2>
     <p id="addSiteSection">
-        <input placeholder="site domain" id="addSiteDomain"/>
+        <input class="siteinput" placeholder="site domain" id="addSiteDomain"/>
         <span>
             Productive:
             <input type="checkbox" id="addProductiveSelection"></input>

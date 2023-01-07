@@ -3,7 +3,10 @@
     "name": "Motivation Game",
     "version": "1.0",
     "description": "TODO",
-    "icons": {},
+    "icons": {
+        "48" : "images/small_icon.png",
+        "128": "images/reg_icon.png"
+    },
     "content_scripts": [
         {
             "js": [
@@ -20,7 +23,7 @@
         "type": "module"
     },
     "action": {
-        "default_icon": {},
+        "default_icon": "images/reg_icon.png",
         "default_popup": "type_popup.html"
     },
     "permissions": [
