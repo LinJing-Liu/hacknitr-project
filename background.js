@@ -17,6 +17,12 @@ let start_time = null;
 let end_time = null;
 let time_spent = 0;
 
+// setting the values initially
+chrome.storage.local.set({ prodTime : prod_time })
+chrome.storage.local.set({ unprodTime : unprod_time })
+chrome.storage.local.set({ prodSites : productive_sites })
+chrome.storage.local.set({ unprodSites : unproductive_sites })
+
 async function update() {
   let temp_site = await getTab();
   if (temp_site == null) {
