@@ -103,6 +103,17 @@ function isProductiveSite(site) {
   return res.length > 0;
 }
 
+//checking unproductive
+function isUnproductiveSite(site) {
+  if (site == null) {
+    return false;
+  }
+  let res = unproductive_sites.filter(item => site.match(item) != null);
+  return res.length > 0;
+}
+
+
+
 function addSite(site, productive) {
   // match www something com
   if (!site.match("www.*com")) {
@@ -206,3 +217,4 @@ function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
+
