@@ -5,9 +5,9 @@ chrome.runtime.onInstalled.addListener(() => {
   startTimer();
 });
 
-const productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
+var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
-const unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
+var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
   "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
 
 let prod_time = 0; //minutes
@@ -27,6 +27,16 @@ chrome.storage.local.set({ prodTime : prod_time })
 chrome.storage.local.set({ unprodTime : unprod_time })
 chrome.storage.local.set({ prodSites : productive_sites })
 chrome.storage.local.set({ unprodSites : unproductive_sites })
+
+chrome.storage.onChanged.addListener(function (changes, areaName) {
+  if (changes.prodSites != null) {
+    productive_sites = changes.prodSites.newValue
+  }
+
+  if (changes.unprodSites != null) {
+    unproductive_sites = changes.unprodSites.newValue
+  }
+})
 
 async function update() {
 
