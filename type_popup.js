@@ -8,6 +8,13 @@ chrome.storage.local.get("prodTime").then((result) => {
     }
     console.log("prodTime currently is " + prodTime);
     document.getElementById("prod-time").innerHTML = prodTime;
+    //convert productive time into money and add to the piggy bank 60sec=$1
+    if (prodTime!=0){ 
+        //make productive time into float with 2 places after decimal   
+        var money = (prodTime / 60).toFixed(2) ;
+        var new_money= "$" + money
+        document.getElementById("amtofmoney").innerHTML= new_money;
+    }
 });
 
 chrome.storage.local.get("unprodTime").then((result) => {

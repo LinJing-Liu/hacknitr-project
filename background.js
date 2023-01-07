@@ -29,8 +29,10 @@ gen_event_target.addEventListener('deficit', async () => {
 
 
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  console.log("tried to send message 0")
   const response = await chrome.tabs.sendMessage(tab.id, { greeting: "start" });
   // do something with response here, not outside the function
+  console.log("tried to send message 1")
   console.log(response);
 
 
@@ -88,7 +90,7 @@ function deficit() {
 }
 
 function points() {
-  let points = 5 + prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
+  let points = prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
   return points;
 }
 
