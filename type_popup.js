@@ -17,3 +17,15 @@ chrome.storage.local.get("unprodTime").then((result) => {
     console.log("Value currently is " + unprodTime);
     document.getElementById("unprod-time").innerHTML = unprodTime;
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var recordButton = document.getElementById("recordButton");
+    var recordButtonText = document.getElementById("recordButtonText");
+    recordButton.addEventListener('click', function() {
+        if (recordButtonText.innerHTML.toLowerCase() == "start") {
+            recordButtonText.innerHTML = "Stop";
+        } else {
+            recordButtonText.innerHTML = "Start";
+        }
+    });
+});
