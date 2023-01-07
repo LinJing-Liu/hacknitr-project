@@ -1,0 +1,174 @@
+body {
+    width: 400px;
+    color: black;
+    font-size: 14px;
+}
+
+.bodycontainer {
+    margin: 15px;
+}
+
+.section {
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 25px;
+    text-align: center;
+    color: black;
+    margin-bottom:0px;
+}
+
+h2 {
+    font-size: 20px;
+    text-align: left;
+}
+
+/* .TimerStart{
+    display:grid;
+    grid-template-rows:1fr;
+    grid-template-columns:1fr 1fr;
+    margin-bottom:10%;
+    gap : 30px;
+}*/
+
+.recordButton{
+    /*grid-column:1;*/
+   display:inline;
+   position:relative;
+   width:50px;
+
+   
+}
+
+.timericon{
+    display: inline;
+}
+
+.report{
+    display:block;
+    margin-top : 5px;
+    position : relative;
+    left : 160px
+}
+
+.trashImg {
+    max-width: 20px;
+    vertical-align: middle;
+
+}
+
+.site_lists {
+    /*column-count: 2;*/
+    text-align: left;
+
+}
+
+.prod_site_lists {
+    column-span: none;
+    overflow: auto;
+}
+
+button {
+    color: black;
+    vertical-align: middle;
+    
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+} */
+
+.moneySection{
+    display: grid;
+    position: relative;
+    grid-template-rows: 50px;
+    grid-template-columns:1fr 1fr;
+    gap: 10px;
+    bottom: 45px;
+}
+
+.piggybank {
+    position:relative;
+    z-index: 5;
+}
+
+#amtofmoney {
+    display: inline;
+   position: relative; 
+   top: 80px;
+   left : 310px;
+   z-index: 1;
+}
+
+.pig {
+    position:relative;
+    grid-column: 2;
+    z-index:0;
+}
+
+#Shop {
+    grid-column:1;
+    margin-top:30px;
+    height: 50px;
+}
+
+#title {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.heading {
+    font-size: x-large;
+    font-weight: 400;
+}
+
+#addSiteSection label, #addSiteSectionButtons, #addCancelButton, #addSubmitButton {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+#addSiteSection {
+    background-color: lightgray;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.sitelist {
+    margin-top: 10px;
+    margin-left: 0;
+}
+
+.sitelist ul {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.sitelist h3 {
+    font-size: large;
+}
+
+.sitelist img {
+    float: right;
+}
+
+.sitelist #prodSiteLabel, .prodTimelabel {
+    color: green;
+}
+
+.sitelist #unprodSiteLabel, .unprodTimelabel {
+    color: rgb(192, 16, 16);
+}
+
+.prodTimelabel, .unprodTimelabel {
+    margin-bottom: 3px;
+
+}
+
+.divider {
+    border-width: 3px;
+    border-color: purple;
+}

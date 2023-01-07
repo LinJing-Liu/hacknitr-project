@@ -32,7 +32,7 @@ function getSiteContent(sites, productive) {
     var id = 0;
     for (var link of sites) {
         var deleteIcon = "<img src=\"images/trash.png\" class=\"trashImg\" id=\"trash-" + note + id + "\" />"
-        listContent += "<li> <a href=https://" + link + " target=\"_blank\" >" + link + "</a>" + deleteIcon + "</li>";
+        listContent += "<li class=\"list-group-item\"> <a href=https://" + link + " target=\"_blank\" >" + link + "</a>" + deleteIcon + "</li>";
         id ++;
     }
     return listContent;

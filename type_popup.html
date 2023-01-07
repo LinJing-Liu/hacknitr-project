@@ -3,200 +3,75 @@
 
 <head>
     <title>Click It</title>
-    <style type="text/css">
-        body {
-            margin: 20px;
-            width: 400px;
-            color: black;
-            font-size: 14px;
-        }
-
-        h1 {
-            font-size: 25px;
-            text-align: center;
-            color: black;
-            margin-bottom:0px;
-        }
-
-        h2 {
-            font-size: 20px;
-            text-align: left;
-        }
-
-       /* .TimerStart{
-            display:grid;
-            grid-template-rows:1fr;
-            grid-template-columns:1fr 1fr;
-            margin-bottom:10%;
-            gap : 30px;
-        }*/
-
-        .recordButton{
-            /*grid-column:1;*/
-           display:inline;
-           position:relative;
-           width:50px;
-
-           
-        }
-
-        .timericon{
-            position:relative;
-           /* grid-column:2;*/
-            margin-top:5%;
-            top:50%;
-            
-        }
-        .report{
-            display:block;
-            margin-top : 5px;
-            position : relative;
-            left : 160px
-
-        }
-        .trashImg {
-            max-width: 20px;
-            vertical-align: middle;
-
-        }
-
-        .site_lists {
-            /*column-count: 2;*/
-            text-align: left;
-
-        }
-
-        .prod_site_lists {
-            column-span: none;
-            overflow: auto;
-        }
-
-        button {
-            color: black;
-            vertical-align: middle;
-
-
-
-        }
-
-        checkbox {
-            color: pink;
-        }
-
-        .column {
-            float: left;
-            width: 50%;
-        }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        .moneySection{
-            display: grid;
-            position: relative;
-            grid-template-rows: 50px;
-            grid-template-columns:1fr 1fr;
-            gap: 10px;
-            bottom: 45px;
-        }
-
-        .piggybank {
-            position:relative;
-            z-index: 5;
-        }
-
-        #amtofmoney {
-            display: inline;
-           position: relative; 
-           top: 80px;
-           left : 310px;
-           z-index: 1;
-        }
-
-        .pig {
-            position:relative;
-            grid-column: 2;
-            z-index:0;
-        }
-
-        #Shop {
-            grid-column:1;
-            margin-top:30px;
-            height: 50px;
-        }
-
-
-    
-
-    </style>
+    <link rel="stylesheet" href="./type_popup.css">
+    <link rel="stylesheet" href="./library/bootstrap/css/bootstrap.css">
+    <script src="./library/bootstrap/js/bootstrap.js"></script>
+    <script type="module" src="type_popup.js"></script>
 </head>
 
 <body>
-    <h1>Motivation Tracker</h1>
-    <div class="TimerStart">
-    <img class="timericon" src="images/popuptimer.png">
-    <button type="button" id="recordButton">
-        <span id="recordButtonText">Start Timer</span>
-    </button>
-    </div>
+    <div class="bodycontainer">
+        <div class="TimerStart">
+            <h1 id="title">Motivation Tracker</h1>
+            <!-- <img class="timericon" src="images/popuptimer.png"> -->
+        </div>
 
-    <div class="reportSummary">
-        <h3>Time Summary</h3>
-        <p class="timelabel">Time on productive sites:
-        <span id="prod-time"></span> secs</p>
-        <p class="timelabel">Time on unproductive sites:
-        <span id="unprod-time"></span> secs</p>
-        <button class ="report" type="button" id="reportButton">View Full Report </button>
-    </div>
+        <div class="section reportSummary">
+            <h2 class="heading">Time Control and Summary</h2>
+            <p class="prodTimelabel">Time on productive sites:
+            <span id="prod-time"></span> secs</p>
+            <p class="unprodTimelabel">Time on unproductive sites:
+            <span id="unprod-time"></span> secs</p>
+            <button type="button" class="btn btn-sm btn-success" id="recordButton">
+                <span id="recordButtonText">Start Timer</span>
+            </button>
+            <button class="btn btn-sm btn-primary" type="button" id="reportButton">View Time Report </button>
+        </div>
 
+        <hr class="divider" />
 
-    <h2 class="piggybank">Your productive piggybank, Mr.Baconstrip</h2>
-    <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.Baconstrip. </p>
-    <p id="amtofmoney">$00.00</p>
-    <div class="moneySection">
-        <img class="pig" src="images/pig.png">
-        <button type="button" id="Shop">Shop</button>
-    </div>
-
-    <h2>Add a site to your list</h2>
-    <button id="addSiteButton">Add</button>
-    <p id="addSiteSection">
-        <input class="siteinput" placeholder="site domain" id="addSiteDomain"/>
-        <span>
-            Productive:
-            <input type="checkbox" id="addProductiveSelection"></input>
-        </span>
-        <button type="button" id="addCancelButton">Cancel</button>
-        <button type="button" id="addSubmitButton">Submit</button>
-    </p>
-
-    <button type="button" id="detailButton">
-        <span id="detailButtonText">Show</span>
-        Details
-    </button>
-
-
-
-    <div class="row">
-        <div class="column">
-            <div class="prod_site_lists">
-                <h2 id="prodSiteLabel"></h2>
-                <ul id="prodSiteList"></ul>
-
+        <div class="section">
+            <h2 class="piggybank">Your productive piggybank, Mr.Baconstrip</h2>
+            <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.Baconstrip. </p>
+            <p id="amtofmoney">$00.00</p>
+            <div class="moneySection">
+                <img class="pig" src="images/pig.png">
+                <button type="button" id="Shop">Shop</button>
             </div>
         </div>
-        <div class="column">
-            <div class="unprod_site_lists">
 
-                <h2 id="unprodSiteLabel"></h2>
-                <ul id="unprodSiteList"></ul>
+        <hr class="divider" />
+
+        <div class="section">
+            <h2 class="heading">Site Details</h2>
+            <button class="btn btn-sm btn-primary" id="addSiteButton">Add Site</button>
+            <p id="addSiteSection">
+                <input class="form-control siteinput" placeholder="site domain" id="addSiteDomain"/>
+                <label class="form-check-label">
+                    Productive:
+                    <input type="checkbox" class="form-check-input" id="addProductiveSelection"></input>
+                </label>
+                <br />
+                <button type="button" class="btn btn-sm btn-danger" id="addCancelButton">Cancel</button>
+                <button type="button" class="btn btn-sm btn-primary" id="addSubmitButton">Submit</button>
+            </p>
+
+            <button type="button" class="btn btn-sm btn-info" id="detailButton">
+                <span id="detailButtonText">Show</span>
+                Site Details
+            </button>
+
+            <div class="sitelist">
+                <div class="list-group prod_site_lists">
+                    <h3 id="prodSiteLabel"></h3>
+                    <ul id="prodSiteList"></ul>
+                </div>
+                <div class="list-group unprod_site_lists">
+                    <h3 id="unprodSiteLabel"></h3>
+                    <ul id="unprodSiteList"></ul>
+                </div>
             </div>
         </div>
     </div>
 </body>
-<script type="module" src="type_popup.js"></script>
 </html>
