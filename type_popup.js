@@ -1,4 +1,5 @@
 console.log("popup script");   
+const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 
 chrome.storage.local.get("prodTime").then((result) => {
     var prodTime = result.prodTime;
@@ -107,6 +108,27 @@ document.addEventListener('DOMContentLoaded', function () {
             recordButtonText.innerHTML = "Stop";
         } else {
             recordButtonText.innerHTML = "Start";
+        }
+    });
+
+    var detailButton = document.getElementById("detailButton");
+    var detailButtonText = document.getElementById("detailButtonText");
+    var siteElements = [];
+    for (var item of siteElementId) {
+        siteElements.push(document.getElementById(item));
+    }
+    detailButton.addEventListener('click', function() {
+        console.log(detailButtonText.innerHTML.toLowerCase());
+        if (detailButtonText.innerHTML.toLowerCase() == "show") {
+            detailButtonText.innerHTML = "Hide";
+            for(var ele of siteElements) {
+                ele.style.display = "block";
+            }
+        } else {
+            detailButtonText.innerHTML = "Show";
+            for(var ele of siteElements) {
+                ele.style.display = "none";
+            }
         }
     });
 });
