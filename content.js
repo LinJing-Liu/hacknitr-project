@@ -1,5 +1,3 @@
-
-
 chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
   console.log("AHHHHHH")
   if (response.greeting == 'start') {

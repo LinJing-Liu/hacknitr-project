@@ -5,10 +5,9 @@ chrome.runtime.onInstalled.addListener(() => {
   startTimer();
 });
 
-
-const productive_sites = ["canvas", "mail", "drive.google.com", "docs.google.com",
+var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
-const unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
+var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
   "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
 let prod_time = 0; //seconds
 let unprod_time = 0; //seconds
@@ -47,6 +46,16 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+
+chrome.storage.onChanged.addListener(function (changes, areaName) {
+  if (changes.prodSites != null) {
+    productive_sites = changes.prodSites.newValue
+  }
+
+  if (changes.unprodSites != null) {
+    unproductive_sites = changes.unprodSites.newValue
+  }
+})
 
 async function update() {
 
@@ -103,8 +112,14 @@ function addSite(site, productive) {
   let domain = site.substring(site.indexOf("www") + 4, site.indexOf("com") + 3);
   if (productive) {
     productive_sites.push(domain);
+    chrome.storage.local.set({ prodSites : productive_sites }).then(() => {
+      console.log("Prod sites is set to: " + productive_sites);
+    });
   } else {
     unproductive_sites.push(domain);
+    chrome.storage.local.set({ unprodSites : unproductive_sites }).then(() => {
+      console.log("Prod sites is set to: " + unproductive_sites);
+    });
   }
 }
 
@@ -115,8 +130,14 @@ function removeSite(site, productive) {
 
   if (productive) {
     productive_sites = productive_sites.filter(item => item.match(site) == null);
+    chrome.storage.local.set({ prodSites : productive_sites }).then(() => {
+      console.log("Prod sites is set to: " + productive_sites);
+    });
   } else {
     unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
+    chrome.storage.local.set({ unprodSites : unproductive_sites }).then(() => {
+      console.log("Prod sites is set to: " + unproductive_sites);
+    });
   }
 }
 
