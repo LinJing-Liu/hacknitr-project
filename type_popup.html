@@ -18,7 +18,6 @@
             margin-bottom:0px;
         }
 
-
         h2 {
             font-size: 20px;
             text-align: left;
@@ -165,16 +164,17 @@
 
     <h2>Add a site to your list</h2>
     <p id="addSiteSection">
-        <input class="siteinput" placeholder="site domain" />
+        <input class="siteinput" placeholder="site domain" id="addSiteDomain"/>
         <span>
-            Productive?
-            <input type="checkbox"></input>
+            Productive:
+            <input type="checkbox" id="addProductiveSelection"></input>
         </span>
-        <button>Add</button>
+        <button type="button" id="addCancelButton">Cancel</button>
+        <button type="button" id="addSubmitButton">Submit</button>
     </p>
 
     <button type="button" id="detailButton">
-        <span id="detailButtonText">Hide</span>
+        <span id="detailButtonText">Show</span>
         Details
     </button>
 
