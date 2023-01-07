@@ -207,4 +207,9 @@ document.addEventListener('DOMContentLoaded', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
     });
+
+    var reportButton = document.getElementById("reportButton");
+    reportButton.addEventListener('click', function() {
+        window.open("container.html", '_blank').focus();
+    });
 });

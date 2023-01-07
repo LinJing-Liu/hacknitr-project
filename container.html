@@ -2,35 +2,10 @@
 <html>
   <head>
       <title>JavaScript Pie Chart</title>
-      <!--Loading library for making chart-->
-      <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
-      <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+      <script src="./library/anychart-bundle.min.js"></script>
   </head>
   <body>
     <div id="container" style="width: 100%; height: 100%"></div>
-    <script>
-        anychart.onDocumentReady(function() {
-
-        // set the data
-        var data = [
-        {x: "productive", value: background.js.prod_time}, 
-        {x: "unproductive", value: background.js.unprod_time},
-        ];
-
-        // create the chart
-        var chart = anychart.pie();
-
-        // set the chart title
-        chart.title("Your time spent");
-
-        // add the data
-        chart.data(data);
-
-        // display the chart in the container
-        chart.container('container');
-        chart.draw();
-
-        });
-    </script>
+    <script type="module" src="chart.js"></script>
   </body>
 </html>
