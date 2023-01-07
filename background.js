@@ -2,12 +2,13 @@
 
 chrome.runtime.onInstalled.addListener(() => {
   start_time = new Date();
-
   startTimer();
 });
 
-const productive_sites = ["canvas", "mail"];
-const unproductive_sites = ["twitter.com"];
+const productive_sites = ["canvas", "mail", "drive.google.com", "docs.google.com",
+  "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
+const unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
+  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
 let prod_time = 0; //minutes
 let unprod_time = 0; //minutes
 let prev_date = null;
@@ -16,12 +17,18 @@ let temp_site = null;
 let start_time = null;
 let end_time = null;
 let time_spent = 0;
+let prod_mult_factor = 1;
+let unprod_mult_factor = 1;
+//var deficit_event = new CustomEvent("deficit", { "detail": "when spent too much unprod time" });
 
 async function update() {
+
   let temp_site = await getTab();
   if (temp_site == null) {
     return;
   }
+  //if unprod>prod && temp_site==unproductive then display popup
+
   console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
@@ -33,6 +40,26 @@ async function update() {
     console.log("prod_time = " + prod_time);
   }
 }
+
+/*
+if (points() <= 0) {
+  document.dispatchEvent(deficit_event);
+  // Create the event
+
+
+  // Dispatch/Trigger/Fire the event
+
+}
+*/
+
+
+
+function points() {
+  let points = prod_time * prod_mult_factor - unprod_time * unprod_mult_factor;
+  return points;
+}
+
+
 
 //need to check if has url
 function isProductiveSite(site) {
