@@ -6,54 +6,113 @@
     <style type="text/css">
         body {
             margin: 20px;
-            width: 300px;
+            width: 400px;
+            color: black;
+            font-size: 14px;
         }
 
         h1 {
-            font-size: 15px;
+            font-size: 25px;
             text-align: center;
+            color: black;
+        }
+
+
+        h2 {
+            font-size: 20px;
+            text-align: left;
         }
 
         .trashImg {
-            max-width: 25px;
+            max-width: 20px;
+            vertical-align: middle;
+
+        }
+
+        .site_lists {
+            /*column-count: 2;*/
+            text-align: left;
+
+        }
+
+        .prod_site_lists {
+            column-span: none;
+            overflow: auto;
+        }
+
+        button {
+            color: black;
+            vertical-align: middle;
+
+
+
+        }
+
+        checkbox {
+            color: pink;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
         }
     </style>
 </head>
 
 <body>
     <h1>Motivation Tracker</h1>
-    <p class="timelabel">Time on productive sites: 
+    <p class="timelabel">Time on productive sites:
         <span id="prod-time"></span>
     </p>
-    <p class="timelabel">Time on unproductive sites: 
+    <p class="timelabel">Time on unproductive sites:
         <span id="unprod-time"></span>
     </p>
-    
+
     <button type="button" id="recordButton">
         <span id="recordButtonText">Start</span>
     </button>
 
-    <button type="button">Add</button>
-    
+    <button type="button">??? What does this button do?</button>
+
     <p id="addSiteSection">
         <input placeholder="site domain" />
         <span>
-            Productive:
+            Productive?
             <input type="checkbox"></input>
         </span>
-        <button>Submit</button>
+        <button>Add</button>
     </p>
 
     <button type="button" id="detailButton">
         <span id="detailButtonText">Hide</span>
         Details
     </button>
-    
-    <h2 id="prodSiteLabel"></h2>
-    <ul id="prodSiteList"></ul>
 
-    <h2 id="unprodSiteLabel"></h2>
-    <ul id="unprodSiteList"></ul>
+
+
+    <div class="row">
+        <div class="column">
+            <div class="prod_site_lists">
+                <h2 id="prodSiteLabel"></h2>
+                <ul id="prodSiteList"></ul>
+
+            </div>
+        </div>
+        <div class="column">
+            <div class="unprod_site_lists">
+
+                <h2 id="unprodSiteLabel"></h2>
+                <ul id="unprodSiteList"></ul>
+            </div>
+        </div>
+    </div>
 </body>
 <script type="module" src="type_popup.js"></script>
 
