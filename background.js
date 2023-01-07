@@ -6,9 +6,9 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
-  "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com", "http://jakemandell.com/adaptivepitch/"];
+  "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
 var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
-  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com", "http://falstad.com/", "google.com", "https://beaconmethodist.org/"];
+  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com", "google.com", "https://bonsaisushiny.com/"];
 let prod_time = 0; //seconds
 let unprod_time = 0; //seconds
 let prev_date = null;
@@ -71,10 +71,12 @@ async function update() {
   }
   //if unprod>prod && temp_site==unproductive then display popup
 
+  isProductiveSite(temp_site);
   //console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
+
     updateTime(time_spent, isProductiveSite(curr_site));
     curr_site = temp_site;
     start_time = end_time;

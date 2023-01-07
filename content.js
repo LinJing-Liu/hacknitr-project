@@ -65,12 +65,6 @@ chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
     </style>
     </div>
     <div>
-      <style>
-        .hello {
-          color: red;
-        }
-      </style>
-      <button class="hello" type="button">HELLO BUTTON2!</button>
 
 <div>
   <button class="example">Click here to see the modal!</button>
@@ -83,10 +77,47 @@ chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
     </div>
   </div>
   
+  <div>
+  <script>
+  let modal = document.querySelector(".modal");
+  let trigger = document.querySelector(".example");
+  let closeButton = document.querySelector(".close-button");
+  let yesButton = document.querySelector(".yes_prod");
+  let noButton = document.querySelector(".no_prod");
+
+  function toggleModal() {
+    modal.classList.toggle("show-modal");
+  }
+  function yesButtonFun() {
+    toggleModal();
+    addSite(getTab(), true);
+
+  }
+  function noButtonFun() {
+    toggleModal();
+    addSite(getTab(), false);
+
+  }
+  function windowOnClick(event) {
+    if (event.target === modal) {
+      toggleModal();
+    }
+  }
+  trigger.addEventListener("click", toggleModal);
+
+  yesButton.addEventListener("click", yesButtonFun);
+
+  noButton.addEventListener("click", noButtonFun);
+
+
+  closeButton.addEventListener("click", toggleModal);
+  window.addEventListener("click", windowOnClick);
+</script>
+  </div>
 </div>
 </div>
     `;
-    document.body.append(x);
+    document.body.prepend(x);
     //document.body.append(document.createElement("<include src=\"./modal.html\"></include>"));
 
   }
