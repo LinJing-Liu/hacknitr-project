@@ -1,5 +1,7 @@
 console.log("popup script");   
+
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
+var difficultyValue = 50;
 
 chrome.storage.local.get("prodTime").then((result) => {
     var prodTime = result.prodTime;
@@ -9,11 +11,21 @@ chrome.storage.local.get("prodTime").then((result) => {
     console.log("prodTime currently is " + prodTime);
     document.getElementById("prod-time").innerHTML = prodTime;
     //convert productive time into money and add to the piggy bank 60sec=$1
-    if (prodTime!=0){ 
-        //make productive time into float with 2 places after decimal   
-        var money = (prodTime / 60).toFixed(2) ;
-        var new_money= "$" + money
-        document.getElementById("amtofmoney").innerHTML= new_money;
+    if (prodTime != 0) {
+        chrome.storage.local.get("difficultyValue").then((result) => {
+            if (result.difficultyValue == null) {
+                difficultyValue = 50;
+            } else {
+                difficultyValue = result.difficultyValue;
+            }
+            
+            //make productive time into float with 2 places after decimal 
+            var money = (prodTime / difficultyValue).toFixed(2) ;
+            var new_money= "$" + money
+            document.getElementById("amtofmoney").innerHTML= new_money;
+            document.getElementById("difficultyRange").value = difficultyValue;
+            document.getElementById("difficultyValue").innerHTML = difficultyValue;
+        });  
     }
 });
 
@@ -109,9 +121,10 @@ chrome.storage.local.get("unprodSites").then((result) => {
 
 document.getElementById("addSiteSection").style.display = "none";
 
-// tempData saved for adding sites
+// tempData saved for UI elements
 var siteDomain = "";
 var siteProductive = false;
+var tempDifficultyValue = 50;
 
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton = document.getElementById("recordButton");
@@ -207,4 +220,19 @@ document.addEventListener('DOMContentLoaded', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
     });
+
+    var difficultyRange = document.getElementById("difficultyRange");
+    difficultyRange.addEventListener('input', function(event) {
+        tempDifficultyValue = event.target.value;
+        document.getElementById("difficultyValue").innerHTML = tempDifficultyValue + "(unsaved)";
+    });
+
+    var difficultySubmitButton = document.getElementById("difficultySubmitButton");
+    difficultySubmitButton.addEventListener('click', function() {
+        difficultyValue = tempDifficultyValue;
+        chrome.storage.local.set({ difficultyValue : difficultyValue }).then(() => {
+            console.log("Difficulty value is set to: " + difficultyValue);
+        });
+        document.getElementById("difficultyValue").innerHTML = difficultyValue;
+    });    
 });
