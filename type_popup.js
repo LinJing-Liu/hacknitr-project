@@ -100,6 +100,12 @@ chrome.storage.local.get("unprodSites").then((result) => {
     }
 });
 
+document.getElementById("addSiteSection").style.display = "none";
+
+// tempData saved for adding sites
+var siteDomain = "";
+var siteProductive = false;
+
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton = document.getElementById("recordButton");
     var recordButtonText = document.getElementById("recordButtonText");
@@ -117,6 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var item of siteElementId) {
         siteElements.push(document.getElementById(item));
     }
+
+    for(var ele of siteElements) {
+        ele.style.display = "none";
+    }
+
     detailButton.addEventListener('click', function() {
         console.log(detailButtonText.innerHTML.toLowerCase());
         if (detailButtonText.innerHTML.toLowerCase() == "show") {
@@ -130,5 +141,63 @@ document.addEventListener('DOMContentLoaded', function () {
                 ele.style.display = "none";
             }
         }
+    });
+    
+    var addSiteButton = document.getElementById("addSiteButton");
+    var addSection = document.getElementById("addSiteSection");
+    addSiteButton.addEventListener('click', function() {
+        addSiteButton.style.display = "none";
+        addSection.style.display = "block";
+    });
+
+    var addSiteDomain = document.getElementById("addSiteDomain");
+    addSiteDomain.addEventListener('input', function(event) {
+        siteDomain = event.target.value;
+    });
+
+    var addProdSelection = document.getElementById("addProductiveSelection");
+    addProdSelection.addEventListener('input', function() {
+        siteProductive = addProdSelection.checked;
+    });
+
+    var addSubmitButton = document.getElementById("addSubmitButton");
+    addSubmitButton.addEventListener('click', function() {
+        addSection.style.display = "none";
+        addSiteButton.style.display = "inline";
+        
+        if (!siteDomain.match(".*\..*")) {
+            alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
+            return;
+        }
+
+        if (siteProductive) {
+            chrome.storage.local.get("prodSites").then((result) => {
+                var sites = result.prodSites;
+                sites.push(siteDomain);
+
+                chrome.storage.local.set({ prodSites : sites }).then(() => {
+                    console.log("Prod sites is set to: " + sites);
+                });
+            });
+        } else {
+            chrome.storage.local.get("unprodSites").then((result) => {
+                var sites = result.unprodSites;
+                sites.push(siteDomain);
+
+                chrome.storage.local.set({ unprodSites : sites }).then(() => {
+                    console.log("Unprod sites is set to: " + sites);
+                });
+            });
+        }
+    });
+
+    var addCancelButton = document.getElementById("addCancelButton");
+    addCancelButton.addEventListener('click', function() {
+        siteDomain = "";
+        siteProductive = false;
+        addSiteDomain.value = "";
+        addProdSelection.checked = false;
+        addSection.style.display = "none";
+        addSiteButton.style.display = "inline";
     });
 });
