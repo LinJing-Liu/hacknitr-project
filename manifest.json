@@ -16,7 +16,8 @@
         }
     ],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background.js",
+        "type": "module"
     },
     "action": {
         "default_icon": {},
@@ -25,7 +26,8 @@
     "permissions": [
         "activeTab",
         "scripting",
-        "tabs"
+        "tabs",
+        "storage"
     ],
     "commands": {
         "_execute_action": {

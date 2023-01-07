@@ -6,6 +6,7 @@
     <style type="text/css">
         body {
             margin: 20px;
+            width: 300px;
         }
 
         h1 {
@@ -13,17 +14,20 @@
             text-align: center;
         }
     </style>
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
     <h1>Motivation Tracker</h1>
-
-    time spent on productive sites =
-    time spent on unproductive sites =
+    <p class="timelabel">Time on productive sites: 
+        <span id="prod-time"></span>
+    </p>
+    <p class="timelabel">Time on unproductive sites: 
+        <span id="unprod-time"></span>
+    </p>
+    
     <button type="button" class="btn btn1">Button label</button>
     <button type="button" class="btn btn2">More details</button>
 </body>
+<script type="module" src="type_popup.js"></script>
 
 </html>

@@ -77,9 +77,9 @@ function timeCalculator(in_time, out_time) {
   let em = out_time.getMinutes();
   let es = out_time.getSeconds();
 
-  diffh = eh - sh;
-  diffm = em - sm;
-  diffs = es - ss;
+  let diffh = eh - sh;
+  let diffm = em - sm;
+  let diffs = es - ss;
   let time_spent = diffh * 3600 + diffm * 60 + diffs
   return time_spent;
 }
@@ -91,6 +91,14 @@ function updateTime(time_spent, is_prod) {
   else {
     unprod_time += time_spent;
   }
+
+  chrome.storage.local.set({ prodTime : prod_time }).then(() => {
+    console.log("Prod time is set to: " + prod_time);
+  });
+
+  chrome.storage.local.set({ unprodTime : unprod_time }).then(() => {
+    console.log("Unprod time is set to: " + unprod_time);
+  });
 }
 
 
@@ -109,35 +117,14 @@ new Date();
 
 */
 
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//     console.log("tab updated");
-//     console.log(tabId);
-//     console.log(changeInfo);
-//     console.log(tab.url);
-//     console.log(Date());
-
-//     let new_date = Date();
-//     if (!(prev_date == null)) {
-//         console.log(timeCalculator(prev_date, new_date));
-//     }
-//     prev_date = new_date;
-// });
-
-// chrome.tabs.onCreated.addListener(function(tab) {         
-//     console.log("new tab opened");
-//     console.log(tab);
-//     console.log(Date());
-
-//     let new_date = Date();
-//     if (!(prev_date == null)) {
-//         console.log(timeCalculator(prev_date, new_date));
-//     }
-//     prev_date = new_date;
-// });
-
 // check current tab repeatedly
 async function getTab() {
   let tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+  
+  if (tabs == null || tabs.length < 1) {
+    return;
+  }
+
   let url = tabs[0].url;
   // use `url` here inside the callback because it's asynchronous!
   return url;
