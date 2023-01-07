@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
 var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com", "http://jakemandell.com/adaptivepitch/"];
 var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
-  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
+  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com", "http://falstad.com/", "google.com", "https://beaconmethodist.org/"];
 let prod_time = 0; //seconds
 let unprod_time = 0; //seconds
 let prev_date = null;
@@ -136,7 +136,7 @@ function addSite(site, productive) {
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
       console.log("Prod sites is set to: " + productive_sites);
     });
-  } else {
+  } else if (productive == false) {
     unproductive_sites.push(domain);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
       console.log("Prod sites is set to: " + unproductive_sites);

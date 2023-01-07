@@ -4,15 +4,90 @@ chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
     console.log("deficit event triggered in content.js");
     alert("Friendly Reminder: Your unproductive time has exceeded your productive time. Get back to work!")
   }
-  else if (response.greeting == "prompt greeting") {
+  if (response.greeting == "prompt greeting") { //changed from prompt greeting
     console.log("prompt event triggered in content.js");
     console.log(document);
     console.log("doc height should be printed ^");
     //add popup here
     //document.body.onload = addElement;
-    document.body.appendChild(addElement());
+    //document.body.appendChild(addElement()); !!!!!!!!!!!!!!!!
 
     //document.body.appendChild(logger);
+
+    var x = document.createElement("div");
+    x.innerHTML = `
+    <div>
+    <title>Title of the document</title>
+    <style>
+      .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+      }
+  
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #eeeeee;
+        padding: 1rem 1.5rem;
+        width: 24rem;
+        border-radius: 0.5rem;
+      }
+  
+      .close-button {
+        float: right;
+        width: 1rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 30px;
+        background-color: #eeeeee;
+      }
+  
+      .close-button:hover {
+        background-color: #adadad;
+      }
+  
+      .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+      }
+    </style>
+    </div>
+    <div>
+      <style>
+        .hello {
+          color: red;
+        }
+      </style>
+      <button class="hello" type="button">HELLO BUTTON2!</button>
+
+<div>
+  <button class="example">Click here to see the modal!</button>
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Is this sight productive?</h2>
+      <button class="yes_prod">Yes</button>
+      <button class="no_prod">No</button>
+    </div>
+  </div>
+  
+</div>
+</div>
+    `;
+    document.body.append(x);
+    //document.body.append(document.createElement("<include src=\"./modal.html\"></include>"));
 
   }
 });
