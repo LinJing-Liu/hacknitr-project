@@ -44,7 +44,7 @@ function getSiteContent(sites, productive) {
     var id = 0;
     for (var link of sites) {
         var deleteIcon = "<img src=\"images/trash.png\" class=\"trashImg\" id=\"trash-" + note + id + "\" />"
-        listContent += "<li> <a href=https://" + link + " target=\"_blank\" >" + link + "</a>" + deleteIcon + "</li>";
+        listContent += "<li class=\"list-group-item\"> <a href=https://" + link + " target=\"_blank\" >" + link + "</a>" + deleteIcon + "</li>";
         id ++;
     }
     return listContent;
@@ -120,6 +120,7 @@ chrome.storage.local.get("unprodSites").then((result) => {
 });
 
 document.getElementById("addSiteSection").style.display = "none";
+document.getElementById("difficultySection").style.display = "none";
 
 // tempData saved for UI elements
 var siteDomain = "";
@@ -234,5 +235,27 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Difficulty value is set to: " + difficultyValue);
         });
         document.getElementById("difficultyValue").innerHTML = difficultyValue;
-    });    
+    });
+    
+    var reportButton = document.getElementById("reportButton");
+    reportButton.addEventListener('click', function() {
+        window.open("container.html", '_blank').focus();
+    });
+    
+    var difficultySection = document.getElementById("difficultySection");
+    var difficultyButtonText = document.getElementById("difficultyButtonText");
+    var difficultyButton = document.getElementById("difficultyButton");
+
+    difficultyButton.addEventListener('click', function() {
+        if (difficultyButtonText.innerHTML.toLowerCase() == "show more") {
+            console.log("show");
+            difficultyButtonText.innerHTML = "Hide"
+            difficultySection.style.display = "block";
+        } else {
+            console.log("hide");
+            difficultyButtonText.innerHTML = "Show More"
+            difficultySection.style.display = "none";
+        }
+    });
+
 });

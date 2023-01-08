@@ -117,6 +117,15 @@ function isProductiveSite(site) {
   else { return promptTimeType(); }//add more to handle null?
 }
 
+//checking unproductive
+function isUnproductiveSite(site) {
+  if (site == null) {
+    return false;
+  }
+  let res = unproductive_sites.filter(item => site.match(item) != null);
+  return res.length > 0;
+}
+
 function promptTimeType() { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
@@ -232,3 +241,4 @@ function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
+
