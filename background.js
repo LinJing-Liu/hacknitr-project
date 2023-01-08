@@ -26,7 +26,7 @@ var BUTTONTEXT = "Start";
 
 chrome.storage.local.set({recordButtonText:BUTTONTEXT});
 const prompt_event = new Event("prompt");
-
+var lastPromptURL = null;
 
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
@@ -41,11 +41,16 @@ gen_event_target.addEventListener('deficit', async () => {
 gen_event_target.addEventListener('prompt', async () => {
   console.log("prompt event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  //console.log("tried to send message 0")
-  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
-  // do something with response here, not outside the function
-  //console.log("tried to send message 1")
-  //console.log(response);
+  if (tab.url == lastPromptURL) {
+    return;
+  } else {
+    lastPromptURL = tab.url;
+    //console.log("tried to send message 0")
+    const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
+    // do something with response here, not outside the function
+    //console.log("tried to send message 1")
+    //console.log(response);
+  }
 }, false);
 
 
