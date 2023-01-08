@@ -4,7 +4,7 @@
     "version": "1.0",
     "description": "TODO",
     "icons": {
-        "48" : "images/small_icon.png",
+        "48": "images/small_icon.png",
         "128": "images/reg_icon.png"
     },
     "content_scripts": [
