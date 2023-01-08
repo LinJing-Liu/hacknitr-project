@@ -153,7 +153,6 @@
         <button class ="report" type="button">View Full Report </button>
     </div>
 
-
     <h2 class="piggybank">Your productive piggybank, Mr.Baconstrip</h2>
     <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.Baconstrip. </p>
     <p id="amtofmoney">$00.00</p>
@@ -174,12 +173,19 @@
         <button type="button" id="addSubmitButton">Submit</button>
     </p>
 
+    <h2>Difficulty Adjustment (1-100)</h2>
+    <div class="slidecontainer">
+        <span>Difficulty Value:
+            <span id="difficultyValue"></span>
+        </span>
+        <input type="range" min="1" max="100" value="50" class="slider" id="difficultyRange">
+        <button id="difficultySubmitButton">Submit</button>
+    </div>
+
     <button type="button" id="detailButton">
         <span id="detailButtonText">Show</span>
         Details
     </button>
-
-
 
     <div class="row">
         <div class="column">
