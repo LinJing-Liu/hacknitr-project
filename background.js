@@ -21,7 +21,6 @@ let prod_mult_factor = 1;
 let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
-/*let recordbuttonText = "Start";*/
 var BUTTONTEXT = "Start";
 
 chrome.storage.local.set({recordButtonText:BUTTONTEXT});
@@ -31,10 +30,7 @@ var lastPromptURL = null;
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  //console.log("tried to send message 0")
   const response = await chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
-  // do something with response here, not outside the function
-  //console.log("tried to send message 1")
   //console.log(response);
 }, false);
 
@@ -45,23 +41,16 @@ gen_event_target.addEventListener('prompt', async () => {
     return;
   } else {
     lastPromptURL = tab.url;
-    //console.log("tried to send message 0")
     const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
-    // do something with response here, not outside the function
-    //console.log("tried to send message 1")
     //console.log(response);
   }
 }, false);
-
-
-
 
 // setting the values initially
 chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
-/*chrome.storage.local.set({recordButtonText: recordbuttonText})*/
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -79,10 +68,8 @@ async function update() {
   if (temp_site == null) {
     return;
   }
-  //if unprod>prod && temp_site==unproductive then display popup
 
   isProductiveSite(temp_site);
-  //console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
@@ -90,18 +77,13 @@ async function update() {
     updateTime(time_spent, isProductiveSite(curr_site));
     curr_site = temp_site;
     start_time = end_time;
-    //console.log("unprod_time = " + unprod_time);
-    //console.log("prod_time = " + prod_time);
     deficit();
   }
 }
-function deficit() {
-  //console.log("points (called in deficit) = " + points());
-  if (points() <= 0) {
-    //console.log("if loop points<=0");
-    gen_event_target.dispatchEvent(deficit_event);
-    //console.log("event dispatched");
 
+function deficit() {
+  if (points() <= 0) {
+    gen_event_target.dispatchEvent(deficit_event);
   }
 }
 
@@ -110,12 +92,8 @@ function points() {
   return points;
 }
 
-
-
-//need to check if has url
+// need to check if has url
 function isProductiveSite(site) {
-  //can return null
-
   if (site == null) {
     return null;
   }
@@ -142,8 +120,6 @@ function promptTimeType() { //promise?
   console.log("prompt event dispatched");
 
 }
-
-
 
 function addSite(site, productive) {
   // match www something com
@@ -219,20 +195,6 @@ function updateTime(time_spent, is_prod) {
     console.log("Unprod time is set to: " + unprod_time);
   });
 }
-
-
-
-
-/*
-if in prod_sites then add to prod_time
-else if in unprod_sites then add to unprod time_
-else prompt user if site is in prod/unprod
-
-new Date();
-
-
-
-*/
 
 // check current tab repeatedly
 async function getTab() {

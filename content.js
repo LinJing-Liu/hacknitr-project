@@ -1,31 +1,20 @@
 chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
-  console.log("AHHHHHH")
+  console.log("Received message");
+
   if (response.greeting == "deficit greeting") {
     console.log("deficit event triggered in content.js");
-    alert("Friendly Reminder: Your unproductive time has exceeded your productive time. Get back to work!")
+    alert("Friendly Reminder: Your unproductive time has exceeded your productive time. Get back to work!");
   }
   if (response.greeting == "prompt greeting") { //changed from prompt greeting
     console.log("prompt event triggered in content.js");
     console.log(document);
     console.log("doc height should be printed ^");
-    //add popup here
-    //document.body.onload = addElement;
-    //document.body.appendChild(addElement()); !!!!!!!!!!!!!!!!
-
-    //document.body.appendChild(logger);
-
-    alert("This website is not labeled as productive or nonproductive. Please add it using the extension if you want to use it.")
+    alert("This website is not labeled as productive or nonproductive. Please add it using the extension if you want to use it.");
     document.body.prepend(x);
-    //document.body.append(document.createElement("<include src=\"./modal.html\"></include>"));
   }
 });
 
-
-
-
-
 console.log("page has content!")
-
 
 function addElement() {
   // create a new div element

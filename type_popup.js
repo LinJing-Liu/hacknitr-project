@@ -135,7 +135,6 @@ chrome.storage.local.get("recordButtonText").then((result)=>{
 
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton_local = document.getElementById("recordButton");
-    /*var recordButtonText_local = document.getElementById("recordButtonText");*/
     chrome.storage.local.get("recordButtonText").then((result) => {
         var recordButtonTextt= result.recordButtonText; 
         recordButton_local.addEventListener('click', function() {
@@ -159,16 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
     );
-        /*recordButton.addEventListener('click', function() {
-            if (recordButtonText.innerHTML.toLowerCase() == "start") {
-                recordButtonText.innerHTML = "Stop";
-                
-            } else {
-                recordButtonText.innerHTML = "Start";
-            }
-        });*/
-    
-    
 
     var detailButton = document.getElementById("detailButton");
     var detailButtonText = document.getElementById("detailButtonText");
