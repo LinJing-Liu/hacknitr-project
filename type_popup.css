@@ -93,13 +93,15 @@ button {
 .piggybank {
     position:relative;
     z-index: 5;
+    margin-bottom: -10px;
+    margin-top: 10px;
 }
 
 #amtofmoney {
     display: inline;
     position: relative; 
     top: 120px;
-    left : -10px;
+    left : 100px;
     z-index: 1;
 }
 

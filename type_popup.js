@@ -127,16 +127,48 @@ var siteDomain = "";
 var siteProductive = false;
 var tempDifficultyValue = 50;
 
+chrome.storage.local.get("recordButtonText").then((result)=>{
+    var recordButtonTextt= result.recordButtonText; 
+    document.getElementById("recordButtonText").innerHTML = recordButtonTextt;
+    console.log("the button state is" + recordButtonTextt);
+});
+
 document.addEventListener('DOMContentLoaded', function () {
-    var recordButton = document.getElementById("recordButton");
-    var recordButtonText = document.getElementById("recordButtonText");
-    recordButton.addEventListener('click', function() {
-        if (recordButtonText.innerHTML.toLowerCase() == "start") {
-            recordButtonText.innerHTML = "Stop";
-        } else {
-            recordButtonText.innerHTML = "Start";
-        }
-    });
+    var recordButton_local = document.getElementById("recordButton");
+    /*var recordButtonText_local = document.getElementById("recordButtonText");*/
+    chrome.storage.local.get("recordButtonText").then((result) => {
+        var recordButtonTextt= result.recordButtonText; 
+        recordButton_local.addEventListener('click', function() {
+
+            if (recordButtonTextt == "Start") {
+                document.getElementById("recordButtonText").innerHTML = "Stop";
+                recordButtonTextt="Stop";
+                chrome.storage.local.set({recordButtonText : recordButtonTextt}).then(() => {
+                    console.log("changed button state to stop");
+                });
+                
+            } else {
+                document.getElementById("recordButtonText").innerHTML = "Start";
+                recordButtonTextt="Start";
+                chrome.storage.local.set({ recordButtonText : recordButtonTextt }).then(()=> {
+                    console.log("changed button state to start");
+                });
+            }
+        });
+
+
+    }
+    );
+        /*recordButton.addEventListener('click', function() {
+            if (recordButtonText.innerHTML.toLowerCase() == "start") {
+                recordButtonText.innerHTML = "Stop";
+                
+            } else {
+                recordButtonText.innerHTML = "Start";
+            }
+        });*/
+    
+    
 
     var detailButton = document.getElementById("detailButton");
     var detailButtonText = document.getElementById("detailButtonText");

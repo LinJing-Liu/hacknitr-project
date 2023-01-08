@@ -23,7 +23,7 @@
             <p class="unprodTimelabel">Time on unproductive sites:
             <span id="unprod-time"></span> secs</p>
             <button type="button" class="btn btn-sm btn-success" id="recordButton">
-                <span id="recordButtonText">Start Timer</span>
+                <span id="recordButtonText">Start</span>
             </button>
             <button class="btn btn-sm btn-primary" type="button" id="reportButton">View Time Report </button>
         </div>
@@ -33,6 +33,10 @@
         <div class="section">
             <h2 class="heading piggybank">Your Productive Piggybank, Mr.BaconStrip</h2>
             <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.BaconStrip. </p>
+            <p id="amtofmoney">$00.00</p>
+            <div class="moneySection">
+                <img class="pig" src="images/pig.png">
+            </div>
             <button class="btn btn-sm btn-primary" id="difficultyButton">
                 <span id="difficultyButtonText">Show More</span>
             </button>
@@ -47,10 +51,6 @@
                     <input type="range" min="1" max="100" value="50" class="slider" id="difficultyRange">
                 </div>
                 <button class="btn btn-sm btn-primary" id="difficultySubmitButton">Submit</button>
-            </div>
-            <p id="amtofmoney">$00.00</p>
-            <div class="moneySection">
-                <img class="pig" src="images/pig.png">
             </div>
         </div>
 
