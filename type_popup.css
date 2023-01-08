@@ -37,9 +37,7 @@ h2 {
     /*grid-column:1;*/
    display:inline;
    position:relative;
-   width:50px;
-
-   
+   width:50px; 
 }
 
 .timericon{
@@ -101,7 +99,7 @@ button {
     display: inline;
     position: relative; 
     top: 120px;
-    left : 50px;
+    left : -10px;
     z-index: 1;
 }
 
@@ -113,7 +111,7 @@ button {
 
 #title {
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: bold;
     color: #1E2F97;
 }
 
@@ -169,4 +167,12 @@ button {
     border-width: 4px;
     border-color: #232ae2;
     box-shadow: none;
+}
+
+#difficultyHeading {
+    font-size: medium;
+}
+
+#difficultyButton, #shopButton {
+    margin-bottom: 6px;
 }

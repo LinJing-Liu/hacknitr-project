@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
 var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
 var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
-  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
+  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com", "google.com", "https://bonsaisushiny.com/"];
 let prod_time = 0; //seconds
 let unprod_time = 0; //seconds
 let prev_date = null;
@@ -21,23 +21,27 @@ let prod_mult_factor = 1;
 let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
-
+const prompt_event = new Event("prompt");
 
 
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
-
-
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  console.log("tried to send message 0")
-  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "start" });
+  //console.log("tried to send message 0")
+  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
   // do something with response here, not outside the function
-  console.log("tried to send message 1")
-  console.log(response);
+  //console.log("tried to send message 1")
+  //console.log(response);
+}, false);
 
-
-
-  // chrome.runtime.sendMessage('start'); /*alert("Deficit event");*/
+gen_event_target.addEventListener('prompt', async () => {
+  console.log("prompt event triggered");
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  //console.log("tried to send message 0")
+  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
+  // do something with response here, not outside the function
+  //console.log("tried to send message 1")
+  //console.log(response);
 }, false);
 
 
@@ -67,24 +71,26 @@ async function update() {
   }
   //if unprod>prod && temp_site==unproductive then display popup
 
-  console.log(temp_site);
+  isProductiveSite(temp_site);
+  //console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
+
     updateTime(time_spent, isProductiveSite(curr_site));
     curr_site = temp_site;
     start_time = end_time;
-    console.log("unprod_time = " + unprod_time);
-    console.log("prod_time = " + prod_time);
+    //console.log("unprod_time = " + unprod_time);
+    //console.log("prod_time = " + prod_time);
     deficit();
   }
 }
 function deficit() {
-  console.log("points (called in deficit) = " + points());
+  //console.log("points (called in deficit) = " + points());
   if (points() <= 0) {
-    console.log("if loop points<=0");
+    //console.log("if loop points<=0");
     gen_event_target.dispatchEvent(deficit_event);
-    console.log("event dispatched");
+    //console.log("event dispatched");
 
   }
 }
@@ -98,11 +104,17 @@ function points() {
 
 //need to check if has url
 function isProductiveSite(site) {
+  //can return null
+
   if (site == null) {
-    return false;
+    return null;
   }
-  let res = productive_sites.filter(item => site.match(item) != null);
-  return res.length > 0;
+
+  let prod_filter = productive_sites.filter(item => site.match(item) != null);
+  let unprod_filter = unproductive_sites.filter(item => site.match(item) != null);
+  if (prod_filter.length > 0) { return true; }
+  else if (unprod_filter.length > 0) { return false; }
+  else { return promptTimeType(); }//add more to handle null?
 }
 
 //checking unproductive
@@ -112,6 +124,13 @@ function isUnproductiveSite(site) {
   }
   let res = unproductive_sites.filter(item => site.match(item) != null);
   return res.length > 0;
+}
+
+function promptTimeType() { //promise?
+  //open modal box (run html)
+  gen_event_target.dispatchEvent(prompt_event);
+  console.log("prompt event dispatched");
+
 }
 
 
@@ -128,7 +147,7 @@ function addSite(site, productive) {
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
       console.log("Prod sites is set to: " + productive_sites);
     });
-  } else {
+  } else if (productive == false) {
     unproductive_sites.push(domain);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
       console.log("Prod sites is set to: " + unproductive_sites);
@@ -170,12 +189,17 @@ function timeCalculator(in_time, out_time) {
 }
 
 function updateTime(time_spent, is_prod) {
-  if (is_prod) {
+
+  if (is_prod == null) {
+  }
+
+  else if (is_prod) {
     prod_time += time_spent;
   }
-  else {
+  else if (!is_prod) {
     unprod_time += time_spent;
   }
+
 
   chrome.storage.local.set({ prodTime: prod_time }).then(() => {
     console.log("Prod time is set to: " + prod_time);
@@ -187,9 +211,7 @@ function updateTime(time_spent, is_prod) {
 }
 
 
-function promptTimeType() {
 
-}
 
 /*
 if in prod_sites then add to prod_time

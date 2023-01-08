@@ -33,7 +33,21 @@
         <div class="section">
             <h2 class="heading piggybank">Your Productive Piggybank, Mr.BaconStrip</h2>
             <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.BaconStrip. </p>
-            <button class="btn btn-sm btn-warning">Shop</button>
+            <button class="btn btn-sm btn-primary" id="difficultyButton">
+                <span id="difficultyButtonText">Show More</span>
+            </button>
+            <button class="btn btn-sm btn-warning" id="shopButton">Shop</button>
+            <div id="difficultySection">
+                <h3 id="difficultyHeading">Difficulty Adjustment (1-100)</h3>
+                <div class="slidecontainer">
+                    <span>Difficulty Value:
+                        <span id="difficultyValue"></span>
+                    </span>
+                    <br />
+                    <input type="range" min="1" max="100" value="50" class="slider" id="difficultyRange">
+                </div>
+                <button class="btn btn-sm btn-primary" id="difficultySubmitButton">Submit</button>
+            </div>
             <p id="amtofmoney">$00.00</p>
             <div class="moneySection">
                 <img class="pig" src="images/pig.png">
