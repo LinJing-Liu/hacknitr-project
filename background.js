@@ -51,7 +51,7 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
-chrome.storage.local.set({ amtofmoney: money_piggybank })
+chrome.storage.local.set({ amtofmoney: 0 })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {

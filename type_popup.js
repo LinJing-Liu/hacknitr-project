@@ -2,6 +2,7 @@ console.log("popup script");
 
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 var difficultyValue = 50;
+var moneyTime = 5;
 
 chrome.storage.local.get("prodTime").then((result) => {
     var prodTime = result.prodTime;
@@ -11,13 +12,13 @@ chrome.storage.local.get("prodTime").then((result) => {
     console.log("prodTime currently is " + prodTime);
     document.getElementById("prod-time").innerHTML = prodTime;
     chrome.storage.local.get("amtofmoney").then((result) => {
-        var amt_of_money = result.amtofmoney;
-        var notstring_amt = parseFloat(amt_of_money)
-        if (amt_of_money == null) {
-            amt_of_money = 5;
+        var amtMoney = result.amtofmoney;
+        if (amtMoney == null) {
+            amtMoney = 5;
         }
+        console.log(amtMoney)
         //convert productive time into money and add to the piggy bank 60sec=$1
-        if (prodTime != 0 || amt_of_money != 0) {
+        if (prodTime != 0 || amtMoney != 0) {
             chrome.storage.local.get("difficultyValue").then((result) => {
                 if (result.difficultyValue == null) {
                     difficultyValue = 50;
@@ -25,16 +26,17 @@ chrome.storage.local.get("prodTime").then((result) => {
                     difficultyValue = result.difficultyValue;
                 }
 
-
                 //make productive time into float with 2 places after decimal
-                //var money = (notstring_amt + (prodTime - notstring_amt / difficultyValue)).toFixed(2);
-                var money = (notstring_amt + (prodTime - notstring_amt / difficultyValue)).toFixed(2);
-                var new_money = "$" + money;
-                document.getElementById("amtofmoney").innerHTML = new_money;
+                // TODO: update formula for money
+                // var money = (parseFloat(amtMoney) + (prodTime/difficultyValue)).toFixed(2);
+                moneyTime = prodTime
+                var money = (prodTime/difficultyValue).toFixed(2);
                 chrome.storage.local.set({ amtofmoney: money });
+
+                document.getElementById("amtofmoney").innerHTML = "$" + money;
                 document.getElementById("difficultyRange").value = difficultyValue;
                 document.getElementById("difficultyValue").innerHTML = difficultyValue;
-            }); po
+            });
         }
     });
 });
@@ -266,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Difficulty value is set to: " + difficultyValue);
         });
         document.getElementById("difficultyValue").innerHTML = difficultyValue;
+        document.getElementById("amtofmoney").innerHTML = "$" + (parseFloat(moneyTime)/difficultyValue).toFixed(2);
     });
 
     var reportButton = document.getElementById("reportButton");
