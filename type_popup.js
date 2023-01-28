@@ -51,6 +51,14 @@ function updateTimeLabels() {
 updateTimeLabels()
 setInterval(updateTimeLabels, 1000)
 
+chrome.storage.local.get("isFocused").then((result) => {
+    document.getElementById("focusSwitch").checked = result.isFocused;
+});
+
+chrome.storage.local.get("isPaused").then((result) => {
+    document.getElementById("pauseAddSiteSwitch").checked = result.isPaused;
+});
+
 function getSiteContent(sites, productive) {
     let note = productive ? "p" : "up"
     var listContent = "";
@@ -371,17 +379,17 @@ focusButton2.addEventListener('click', function () {
             difficultySection.style.display = "none";
         }
     });
-    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
 
+    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
     pauseSwitch.addEventListener('click', function () {
         togglePause();
     });
 
     var focusSwitch = document.getElementById("focusSwitch");
-
     focusSwitch.addEventListener('click', function () {
         toggleFocus();
     });
+
     function togglePause() {
         // Get the checkbox
         var checkBox = document.getElementById("pauseAddSiteSwitch");
@@ -395,6 +403,7 @@ focusButton2.addEventListener('click', function () {
             chrome.storage.local.set({ isPaused: false })
         }
     }
+
     function toggleFocus() {
         // Get the checkbox
         var checkBox = document.getElementById("focusSwitch");

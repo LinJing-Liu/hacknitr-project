@@ -51,7 +51,7 @@ gen_event_target.addEventListener('prompt', async () => {
   console.log(await curr_site);
   if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
     //curr_site = temp_site;
-    console.log("promp listener bool cond is wrong          :(");
+    console.log("promp listener bool cond is wrong :(");
 
     //temp=true_curr != curr 
     return; //oishii twitter oishii doesn't work
