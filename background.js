@@ -23,6 +23,7 @@ const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
 var add_site_paused = false;
 var focus_mode_on = false;
+let old_site = null;
 
 
 
@@ -40,13 +41,23 @@ gen_event_target.addEventListener('deficit', async () => {
 gen_event_target.addEventListener('prompt', async () => {
   console.log("prompt event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  if (tab.url == lastPromptURL/*temp_site == curr_site*/) {
-    curr_site = temp_site;
+  console.log("tab.url: ");
+  console.log(await tab.url);
+  console.log("lastPromptURL");
+  console.log(await lastPromptURL);
+  console.log("temp_site");
+  console.log(await temp_site);
+  console.log("curr_site");
+  console.log(await curr_site);
+  if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
+    //curr_site = temp_site;
     console.log("promp listener bool cond is wrong          :(");
+
     //temp=true_curr != curr 
     return; //oishii twitter oishii doesn't work
   } else {
     lastPromptURL = tab.url;
+    old_site = curr_site;
     const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
     console.log("prompt event triggered end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
   }
@@ -93,6 +104,7 @@ async function update() {
     time_spent = timeCalculator(start_time, end_time);
 
     updateTime(time_spent, isProductiveSite(curr_site, false));
+    old_site = curr_site;
     curr_site = temp_site;
     start_time = end_time;
     deficit(isProd);
