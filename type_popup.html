@@ -47,6 +47,44 @@
             </span>
         </label>
 
+        <hr class="divider" />
+
+        <div class="section">
+            <h2 class="heading">Site Details</h2>
+            <button class="btn btn-sm btn-primary" id="addSiteButton">Add Site</button>
+            <p id="addSiteSection">
+                <input class="form-control siteinput" placeholder="site domain" id="addSiteDomain" />
+
+                <label class="form-check-label">
+                    Current site:
+                    <input type="checkbox" class="form-check-input" id="addCurrentSite"></input>
+                </label>
+                <label class="form-check-label">
+                    Productive:
+                    <input type="checkbox" class="form-check-input" id="addProductiveSelection"></input>
+                </label>
+                <br />
+                <button type="button" class="btn btn-sm btn-danger" id="addCancelButton">Cancel</button>
+                <button type="button" class="btn btn-sm btn-primary" id="addSubmitButton">Submit</button>
+            </p>
+
+            <button type="button" class="btn btn-sm btn-info" id="detailButton">
+                <span id="detailButtonText">Show</span>
+                Site Details
+            </button>
+
+            <div class="sitelist">
+                <div class="list-group prod_site_lists">
+                    <h3 id="prodSiteLabel"></h3>
+                    <ul id="prodSiteList"></ul>
+                </div>
+                <div class="list-group unprod_site_lists">
+                    <h3 id="unprodSiteLabel"></h3>
+                    <ul id="unprodSiteList"></ul>
+                </div>
+            </div>
+        </div>
+        <hr class="divider" />
 
         <div class="section">
             <h2 class="heading piggybank">Your Productive Piggybank, Mr.BaconStrip</h2>
@@ -74,39 +112,6 @@
         </div>
 
         <hr class="divider" />
-
-        <div class="section">
-            <h2 class="heading">Site Details</h2>
-            <button class="btn btn-sm btn-primary" id="addSiteButton">Add Site</button>
-            <p id="addSiteSection">
-                <input class="form-control siteinput" placeholder="site domain" id="addSiteDomain" />
-                <label class="form-check-label">
-                    Productive:
-                    <input type="checkbox" class="form-check-input" id="addProductiveSelection"></input>
-                </label>
-                <br />
-                <button type="button" class="btn btn-sm btn-danger" id="addCancelButton">Cancel</button>
-                <button type="button" class="btn btn-sm btn-primary" id="addSubmitButton">Submit</button>
-            </p>
-
-            <button type="button" class="btn btn-sm btn-info" id="detailButton">
-                <span id="detailButtonText">Show</span>
-                Site Details
-            </button>
-
-            <div class="sitelist">
-                <div class="list-group prod_site_lists">
-                    <h3 id="prodSiteLabel"></h3>
-                    <ul id="prodSiteList"></ul>
-                </div>
-                <div class="list-group unprod_site_lists">
-                    <h3 id="unprodSiteLabel"></h3>
-                    <ul id="unprodSiteList"></ul>
-                </div>
-            </div>
-        </div>
-
-
         <!--
 
         <div class="pause_features">

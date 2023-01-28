@@ -138,6 +138,7 @@ document.getElementById("difficultySection").style.display = "none";
 // tempData saved for UI elements
 var siteDomain = "";
 var siteProductive = false;
+var useCurrentSite = false;
 var tempDifficultyValue = 50;
 
 chrome.storage.local.get("recordButtonText").then((result) => {
@@ -295,10 +296,40 @@ focusButton2.addEventListener('click', function () {
         siteProductive = addProdSelection.checked;
     });
 
+    var addCurrentSite = document.getElementById("addCurrentSite");
+    addCurrentSite.addEventListener('input', function () {
+        useCurrentSite = addCurrentSite.checked;
+        console.log("current site box checked /////////////")
+        console.log(useCurrentSite);
+    });
+
     var addSubmitButton = document.getElementById("addSubmitButton");
     addSubmitButton.addEventListener('click', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
+        if (useCurrentSite) {
+
+            /*chrome.tabs.getSelected(null, function (tab) {
+                tab = tab.id;
+                tabUrl = tab.url;
+                console.log("in the thinggggggggggggggggggggg");
+                console.log(tabUrl);
+
+                alert(tab.url);
+            });*/
+            /*console.log(chrome.storage.local.get("currTab"));
+            siteDomain = chrome.storage.local.get("currTab"); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        */
+            console.log("didn't get curr tab yet");
+            chrome.storage.local.get("currSite").then((result) => {
+                console.log("we got the current tab yayyyyyyy");
+
+                siteDomain = result.currSite;
+                console.log(siteDomain);
+            });
+
+            siteDomain = "abc.com";
+        }
 
         if (!siteDomain.match(".*\..*")) {
             alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
