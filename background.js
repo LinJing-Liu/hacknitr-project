@@ -23,7 +23,7 @@ let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
 
-chrome.storage.local.set({recordButtonText:BUTTONTEXT});
+chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
 const prompt_event = new Event("prompt");
 var lastPromptURL = null;
 
@@ -51,6 +51,7 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+chrome.storage.local.set({ amtofmoney: money_piggybank })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
