@@ -170,6 +170,34 @@ function updateFocusTime() {
     });
 }
 
+
+function addSite() {
+    if (!siteDomain.match(".*\..*")) {
+        alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
+        return;
+    }
+
+    if (siteProductive) {
+        chrome.storage.local.get("prodSites").then((result) => {
+            var sites = result.prodSites;
+            sites.push(siteDomain);
+
+            chrome.storage.local.set({ prodSites: sites }).then(() => {
+                console.log("Prod sites is set to: " + sites);
+            });
+        });
+    } else {
+        chrome.storage.local.get("unprodSites").then((result) => {
+            var sites = result.unprodSites;
+            sites.push(siteDomain);
+
+            chrome.storage.local.set({ unprodSites: sites }).then(() => {
+                console.log("Unprod sites is set to: " + sites);
+            });
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton_local = document.getElementById("recordButton");
     chrome.storage.local.get("recordButtonText").then((result) => {
@@ -260,43 +288,15 @@ document.addEventListener('DOMContentLoaded', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
         if (useCurrentSite) {
-
-
-            console.log("didn't get curr tab yet");
             chrome.storage.local.get("currSite").then((result) => {
-                console.log("we got the current tab yayyyyyyy");
-                siteUrl = result.currSite;
-
-
                 siteDomain = result.currSite;
-                console.log(siteDomain);
-            });
-
-        }
-
-        if (!siteDomain.match(".*\..*")) {
-            alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
-            return;
-        }
-
-        if (siteProductive) {
-            chrome.storage.local.get("prodSites").then((result) => {
-                var sites = result.prodSites;
-                sites.push(siteDomain);
-
-                chrome.storage.local.set({ prodSites: sites }).then(() => {
-                    console.log("Prod sites is set to: " + sites);
-                });
+                var url = siteDomain.match(/[\w]+\.[\w]+/)[0];
+                siteDomain = url
+                console.log("add site domain - " + siteDomain);
+                addSite();
             });
         } else {
-            chrome.storage.local.get("unprodSites").then((result) => {
-                var sites = result.unprodSites;
-                sites.push(siteDomain);
-
-                chrome.storage.local.set({ unprodSites: sites }).then(() => {
-                    console.log("Unprod sites is set to: " + sites);
-                });
-            });
+            addSite();
         }
     });
 

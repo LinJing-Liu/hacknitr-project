@@ -95,7 +95,6 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
 async function update() {
   console.log("update is being called");
   let temp_site = await getTab();
-  chrome.storage.local.set({ currSite: temp_site })
   if (temp_site == null) {
     return;
   }
@@ -253,6 +252,8 @@ async function getTab() {
   }
 
   let url = tabs[0].url;
+  chrome.storage.local.set({ currSite: url });
+  
   // use `url` here inside the callback because it's asynchronous!
   return url;
 }
