@@ -75,6 +75,7 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   }
 })
 
+
 async function update() {
 
   let temp_site = await getTab();
@@ -90,12 +91,13 @@ async function update() {
     updateTime(time_spent, isProductiveSite(curr_site));
     curr_site = temp_site;
     start_time = end_time;
-    deficit(isProd);
+
   }
+  deficit(isProd);
 }
 
 function deficit(isProd) {
-  if (points() <= 0 && !isProd) {//how should focus mode factor in on this?
+  if (points() <= 0 && (isProd == false)) {//how should focus mode factor in on this?
     gen_event_target.dispatchEvent(deficit_event);
     if (focus_mode_on) {
       gen_event_target.dispatchEvent(deficit_event);
@@ -103,6 +105,10 @@ function deficit(isProd) {
       gen_event_target.dispatchEvent(deficit_event);
       gen_event_target.dispatchEvent(deficit_event);
     }
+    //wait 5 sec
+    //setInterval(update, 1000);
+
+
   }
 }
 
@@ -127,14 +133,6 @@ function isProductiveSite(site) {
   }//add more to handle null?
 }
 
-//checking unproductive
-function isUnproductiveSite(site) {
-  if (site == null) {
-    return false;
-  }
-  let res = unproductive_sites.filter(item => site.match(item) != null);
-  return res.length > 0;
-}
 
 function promptTimeType() { //promise?
   //open modal box (run html)
