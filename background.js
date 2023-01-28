@@ -23,6 +23,7 @@ const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
 var add_site_paused = false;
 var focus_mode_on = false;
+let old_site = null;
 
 
 
@@ -40,12 +41,25 @@ gen_event_target.addEventListener('deficit', async () => {
 gen_event_target.addEventListener('prompt', async () => {
   console.log("prompt event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  if (tab.url == lastPromptURL) {
-    return;
+  console.log("tab.url: ");
+  console.log(await tab.url);
+  console.log("lastPromptURL");
+  console.log(await lastPromptURL);
+  console.log("temp_site");
+  console.log(await temp_site);
+  console.log("curr_site");
+  console.log(await curr_site);
+  if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
+    //curr_site = temp_site;
+    console.log("promp listener bool cond is wrong          :(");
+
+    //temp=true_curr != curr 
+    return; //oishii twitter oishii doesn't work
   } else {
     lastPromptURL = tab.url;
+    old_site = curr_site;
     const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
-    //console.log(response);
+    console.log("prompt event triggered end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
   }
 }, false);
 
@@ -56,6 +70,7 @@ chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
 chrome.storage.local.set({ isPaused: add_site_paused })
 chrome.storage.local.set({ isFocused: focus_mode_on })
+chrome.storage.local.set({ currSite: temp_site }) //what's the right inputtt????
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -67,6 +82,8 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   }
   if (changes.isPaused != null) {
     add_site_paused = changes.isPaused.newValue
+    console.log("isPaused changed---------------------------------- to: ")
+    console.log(add_site_paused)
   }
 
   if (changes.isFocused != null) {
@@ -78,6 +95,7 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
 async function update() {
   console.log("update is being called");
   let temp_site = await getTab();
+  chrome.storage.local.set({ currSite: temp_site })
   if (temp_site == null) {
     return;
   }
@@ -88,6 +106,7 @@ async function update() {
     time_spent = timeCalculator(start_time, end_time);
 
     updateTime(time_spent, isProductiveSite(curr_site, false));
+    old_site = curr_site;
     curr_site = temp_site;
     start_time = end_time;
     deficit(isProd);
@@ -134,15 +153,19 @@ function isProductiveSite(site, is_true_curr_site) {
   else if (unprod_filter.length > 0) { return false; }
   else {
     if (add_site_paused || !is_true_curr_site) { return null; }
-    else { return promptTimeType(); }
+    else {
+      console.log("paused is off and switched sites so should ask promptTimeType()");
+
+      return promptTimeType(site);
+    }
   }//add more to handle null?
 }
 
 
-function promptTimeType() { //promise?
+function promptTimeType(site) { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
-  console.log("prompt event dispatched");
+  console.log("prompt event dispatched in promptTimeType()");
 
 }
 
@@ -156,12 +179,12 @@ function addSite(site, productive) {
   if (productive) {
     productive_sites.push(domain);
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
-      console.log("Prod sites is set to: " + productive_sites);
+      //console.log("Prod sites is set to: " + productive_sites);
     });
   } else if (productive == false) {
     unproductive_sites.push(domain);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
-      console.log("Prod sites is set to: " + unproductive_sites);
+      //console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
 }
@@ -174,12 +197,12 @@ function removeSite(site, productive) {
   if (productive) {
     productive_sites = productive_sites.filter(item => item.match(site) == null);
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
-      console.log("Prod sites is set to: " + productive_sites);
+      //console.log("Prod sites is set to: " + productive_sites);
     });
   } else {
     unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
-      console.log("Prod sites is set to: " + unproductive_sites);
+      //console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
 }
@@ -213,11 +236,11 @@ function updateTime(time_spent, is_prod) {
 
 
   chrome.storage.local.set({ prodTime: prod_time }).then(() => {
-    console.log("Prod time is set to: " + prod_time);
+    //console.log("Prod time is set to: " + prod_time);
   });
 
   chrome.storage.local.set({ unprodTime: unprod_time }).then(() => {
-    console.log("Unprod time is set to: " + unprod_time);
+    //console.log("Unprod time is set to: " + unprod_time);
   });
 }
 
