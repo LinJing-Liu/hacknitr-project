@@ -30,7 +30,8 @@
         "activeTab",
         "scripting",
         "tabs",
-        "storage"
+        "storage",
+        "notifications"
     ],
     "commands": {
         "_execute_action": {

@@ -174,6 +174,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var detailButton = document.getElementById("detailButton");
     var detailButtonText = document.getElementById("detailButtonText");
+
+
+
     var siteElements = [];
     for (var item of siteElementId) {
         siteElements.push(document.getElementById(item));
@@ -182,6 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var ele of siteElements) {
         ele.style.display = "none";
     }
+
+
 
     detailButton.addEventListener('click', function () {
         console.log(detailButtonText.innerHTML.toLowerCase());
@@ -197,6 +202,43 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    /************************************************** Harim 1/28 2:48am work*/
+
+
+    var pauseAddButton = document.getElementById("pauseAddSiteButton");
+    var focusButton = document.getElementById("focusButton");
+
+    pauseAddButton.addEventListener('click', function () {
+        console.log("pause button clicked");
+        chrome.storage.local.set({ isPaused: true })
+
+    });
+    focusButton.addEventListener('click', function () {
+        console.log("focus button clicked");
+        chrome.storage.local.set({ isFocused: true })
+    });
+
+
+    /*
+        if (siteProductive) {
+            chrome.storage.local.get("prodSites").then((result) => {
+                var sites = result.prodSites;
+                sites.push(siteDomain);
+
+                chrome.storage.local.set({ prodSites: sites }).then(() => {
+                    console.log("Prod sites is set to: " + sites);
+                });
+            });
+    */
+
+
+
+
+
+
+
+    /************************************************** */
+
 
     var addSiteButton = document.getElementById("addSiteButton");
     var addSection = document.getElementById("addSiteSection");

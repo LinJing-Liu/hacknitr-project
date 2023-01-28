@@ -22,6 +22,10 @@ let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
+var add_site_paused = false;
+var focus_mode_on = false;
+
+
 
 chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
 const prompt_event = new Event("prompt");
@@ -51,6 +55,8 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+chrome.storage.local.set({ isPaused: add_site_paused })
+chrome.storage.local.set({ isFocused: focus_mode_on })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -59,6 +65,13 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
 
   if (changes.unprodSites != null) {
     unproductive_sites = changes.unprodSites.newValue
+  }
+  if (changes.isPaused != null) {
+    add_site_paused = changes.isPaused.newValue
+  }
+
+  if (changes.isFocused != null) {
+    focus_mode_on = changes.isFocused.newValue
   }
 })
 
@@ -69,19 +82,27 @@ async function update() {
     return;
   }
 
-  isProductiveSite(temp_site);
-  end_time = new Date();
-  time_spent = timeCalculator(start_time, end_time);
+  let isProd = isProductiveSite(temp_site);
+  if (curr_site != temp_site) {
+    end_time = new Date();
+    time_spent = timeCalculator(start_time, end_time);
 
-  updateTime(time_spent, isProductiveSite(curr_site));
-  curr_site = temp_site;
-  start_time = end_time;
-  deficit();
+    updateTime(time_spent, isProductiveSite(curr_site));
+    curr_site = temp_site;
+    start_time = end_time;
+    deficit(isProd);
+  }
 }
 
-function deficit() {
-  if (points() <= 0) {
+function deficit(isProd) {
+  if (points() <= 0 && !isProd) {//how should focus mode factor in on this?
     gen_event_target.dispatchEvent(deficit_event);
+    if (focus_mode_on) {
+      gen_event_target.dispatchEvent(deficit_event);
+      gen_event_target.dispatchEvent(deficit_event);
+      gen_event_target.dispatchEvent(deficit_event);
+      gen_event_target.dispatchEvent(deficit_event);
+    }
   }
 }
 
@@ -100,7 +121,10 @@ function isProductiveSite(site) {
   let unprod_filter = unproductive_sites.filter(item => site.match(item) != null);
   if (prod_filter.length > 0) { return true; }
   else if (unprod_filter.length > 0) { return false; }
-  else { return promptTimeType(); }//add more to handle null?
+  else {
+    if (add_site_paused) { return null; }
+    else { return promptTimeType(); }
+  }//add more to handle null?
 }
 
 //checking unproductive
@@ -210,4 +234,16 @@ async function getTab() {
 function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
+}
+var options = {
+  type: "basic",
+  title: "get back to work!",
+  message: "your unproductive times is greater than your productive time.",
+  iconUrl: "images/reg_icon.png"
+}
+
+chrome.notifications.create(options, callback);
+
+function callback() {
+  console.log('Popup done!')
 }
