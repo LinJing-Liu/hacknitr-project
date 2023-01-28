@@ -77,38 +77,43 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
 
 
 async function update() {
-
+  console.log("update is being called");
   let temp_site = await getTab();
   if (temp_site == null) {
     return;
   }
 
-  let isProd = isProductiveSite(temp_site);
+  let isProd = isProductiveSite(temp_site, true);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
 
-    updateTime(time_spent, isProductiveSite(curr_site));
+    updateTime(time_spent, isProductiveSite(curr_site, false));
     curr_site = temp_site;
     start_time = end_time;
-
+    deficit(isProd);
   }
-  deficit(isProd);
+  deficit_spam(isProd);
 }
 
 function deficit(isProd) {
-  if (points() <= 0 && (isProd == false)) {//how should focus mode factor in on this?
+  if (points() <= 0 && (isProd == false)) {
     gen_event_target.dispatchEvent(deficit_event);
-    if (focus_mode_on) {
-      gen_event_target.dispatchEvent(deficit_event);
-      gen_event_target.dispatchEvent(deficit_event);
-      gen_event_target.dispatchEvent(deficit_event);
-      gen_event_target.dispatchEvent(deficit_event);
-    }
+
     //wait 5 sec
     //setInterval(update, 1000);
 
 
+  }
+}
+
+function deficit_spam(isProd) {
+  if (points() <= 0 && (isProd == false && focus_mode_on)) {//how should focus mode factor in on this?
+    let curr_time = new Date().getSeconds();
+    if (curr_time % 5 == 0) {
+
+      gen_event_target.dispatchEvent(deficit_event);
+    }
   }
 }
 
@@ -118,7 +123,7 @@ function points() {
 }
 
 // need to check if has url
-function isProductiveSite(site) {
+function isProductiveSite(site, is_true_curr_site) {
   if (site == null) {
     return null;
   }
@@ -128,7 +133,7 @@ function isProductiveSite(site) {
   if (prod_filter.length > 0) { return true; }
   else if (unprod_filter.length > 0) { return false; }
   else {
-    if (add_site_paused) { return null; }
+    if (add_site_paused || !is_true_curr_site) { return null; }
     else { return promptTimeType(); }
   }//add more to handle null?
 }
