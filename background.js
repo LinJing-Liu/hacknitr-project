@@ -70,6 +70,7 @@ chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
 chrome.storage.local.set({ isPaused: add_site_paused })
 chrome.storage.local.set({ isFocused: focus_mode_on })
+chrome.storage.local.set({ currSite: temp_site }) //what's the right inputtt????
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -94,6 +95,7 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
 async function update() {
   console.log("update is being called");
   let temp_site = await getTab();
+  chrome.storage.local.set({ currSite: temp_site })
   if (temp_site == null) {
     return;
   }

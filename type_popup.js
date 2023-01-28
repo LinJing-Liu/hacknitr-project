@@ -153,6 +153,7 @@ document.getElementById("difficultySection").style.display = "none";
 // tempData saved for UI elements
 var siteDomain = "";
 var siteProductive = false;
+var useCurrentSite = false;
 var tempDifficultyValue = 50;
 
 chrome.storage.local.get("recordButtonText").then((result) => {
@@ -225,80 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-    /************************************************** Harim 1/28 2:48am work*/
-
-
     var pauseAddButton = document.getElementById("pauseAddSiteButton");
     var focusButton = document.getElementById("focusButton");
     var toggleButton = document.getElementById("toggle_button_id");
-
-
-    /*
-        pauseAddButton.addEventListener('click', function () {
-            console.log("pause button clicked");
-            chrome.storage.local.set({ isPaused: true })
-    
-        });
-    
-    */
-
-
-
-
-    /*
-
-    function toggle(button) {
-        if (button.value == "OFF") {
-            button.value = "ON";
-        }
-        else {
-            button.value = "OFF";
-        }
-    }
-     var focusButton2 = document.getElementById("focusButton");
-
-focusButton2.addEventListener('click', function () {
-        console.log("focus button clicked");
-        if (button.value == "Turn on focus mode") {
-            button.value = "Turn off focus mode";
-            chrome.storage.local.set({ isFocused: true })
-        }
-        else {
-            button.value = "Turn on focus mode";
-            chrome.storage.local.set({ isFocused: false })
-        }
-
-    });
-        if (siteProductive) {
-            chrome.storage.local.get("prodSites").then((result) => {
-                var sites = result.prodSites;
-                sites.push(siteDomain);
-
-                chrome.storage.local.set({ prodSites: sites }).then(() => {
-                    console.log("Prod sites is set to: " + sites);
-                });
-            });
-
-
-            function toggleFocus(button) {
-        if (button.value == "Turn on focus mode") {
-            button.value = "Turn off focus mode";
-            chrome.storage.local.set({ isFocused: true })
-        }
-        else {
-            button.value = "Turn on focus mode";
-            chrome.storage.local.set({ isFocused: false })
-        }
-    }
-    */
-
-
-
-
-
-
-
-    /************************************************** */
 
 
     var addSiteButton = document.getElementById("addSiteButton");
@@ -318,10 +248,31 @@ focusButton2.addEventListener('click', function () {
         siteProductive = addProdSelection.checked;
     });
 
+    var addCurrentSite = document.getElementById("addCurrentSite");
+    addCurrentSite.addEventListener('input', function () {
+        useCurrentSite = addCurrentSite.checked;
+        console.log("current site box checked /////////////")
+        console.log(useCurrentSite);
+    });
+
     var addSubmitButton = document.getElementById("addSubmitButton");
     addSubmitButton.addEventListener('click', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
+        if (useCurrentSite) {
+
+
+            console.log("didn't get curr tab yet");
+            chrome.storage.local.get("currSite").then((result) => {
+                console.log("we got the current tab yayyyyyyy");
+                siteUrl = result.currSite;
+
+
+                siteDomain = result.currSite;
+                console.log(siteDomain);
+            });
+
+        }
 
         if (!siteDomain.match(".*\..*")) {
             alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
