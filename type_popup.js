@@ -51,6 +51,21 @@ function updateTimeLabels() {
 updateTimeLabels()
 setInterval(updateTimeLabels, 1000)
 
+chrome.storage.local.get("isFocused").then((result) => {
+    document.getElementById("focusSwitch").checked = result.isFocused;
+    if (result.isFocused) {
+        document.getElementById("focusBadge").style.display = "inline-block";
+        var intervalID = setInterval(updateFocusTime, 1000)
+        chrome.storage.local.set({ intervalID: intervalID });
+    } else {
+        document.getElementById("focusBadge").style.display = "none";
+    }
+});
+
+chrome.storage.local.get("isPaused").then((result) => {
+    document.getElementById("pauseAddSiteSwitch").checked = result.isPaused;
+});
+
 function getSiteContent(sites, productive) {
     let note = productive ? "p" : "up"
     var listContent = "";
@@ -146,6 +161,14 @@ chrome.storage.local.get("recordButtonText").then((result) => {
     document.getElementById("recordButtonText").innerHTML = recordButtonTextt;
     console.log("the button state is" + recordButtonTextt);
 });
+
+function updateFocusTime() {
+    chrome.storage.local.get("elapsedTime").then((result) => {
+        var focusTime = result.elapsedTime;
+        chrome.storage.local.set({ elapsedTime : focusTime + 1});
+        document.getElementById("focusTime").innerHTML = getTimeText(focusTime);
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton_local = document.getElementById("recordButton");
@@ -322,17 +345,17 @@ document.addEventListener('DOMContentLoaded', function () {
             difficultySection.style.display = "none";
         }
     });
-    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
 
+    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
     pauseSwitch.addEventListener('click', function () {
         togglePause();
     });
 
     var focusSwitch = document.getElementById("focusSwitch");
-
     focusSwitch.addEventListener('click', function () {
         toggleFocus();
     });
+
     function togglePause() {
         // Get the checkbox
         var checkBox = document.getElementById("pauseAddSiteSwitch");
@@ -346,17 +369,24 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.storage.local.set({ isPaused: false })
         }
     }
+
     function toggleFocus() {
         // Get the checkbox
         var checkBox = document.getElementById("focusSwitch");
 
         // If the checkbox is checked, display the output text
         if (checkBox.checked == true) {
-            console.log("focus button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            chrome.storage.local.set({ isFocused: true })
+            console.log("focus button clicked")
+            document.getElementById("focusBadge").style.display = "inline-block"
+            var intervalID = setInterval(updateFocusTime, 1000)
+            chrome.storage.local.set({ isFocused: true, elapsedTime: 0, intervalID: intervalID });
         } else {
             console.log("focus button clicked");
+            document.getElementById("focusBadge").style.display = "none"
             chrome.storage.local.set({ isFocused: false })
+            chrome.storage.local.get("intervalID").then((result) => {
+                clearInterval(result.intervalID);
+            });
         }
     }
 

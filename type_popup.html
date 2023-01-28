@@ -14,7 +14,6 @@
     <div class="bodycontainer">
         <div class="TimerStart">
             <h1 id="title">Motivation Tracker</h1>
-            <!-- <img class="timericon" src="images/popuptimer.png"> -->
         </div>
 
         <div class="section reportSummary">
@@ -25,27 +24,29 @@
             <p class="unprodTimelabel">Time on unproductive sites:
                 <span id="unprod-time">0 secs</span>
             </p>
-            <button type="button" class="btn btn-sm btn-success" id="recordButton">
-                <span id="recordButtonText">Start</span>
-            </button>
             <button class="btn btn-sm btn-primary" type="button" id="reportButton">View Time Report </button>
+            <p id="addSiteSwitch">
+                <span class="siteSwitchLabel">Stop Recognize New Site</span>
+                <label class="switch">
+                    <input type="checkbox" id="pauseAddSiteSwitch">
+                    <span class="slider round">
+                    </span>
+                </label>
+            </p>
+            <p id="focusSiteSwitch">
+                <span class="siteSwitchLabel">Focus Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="focusSwitch">
+                    <span class="slider round">
+                    </span>
+                </label>
+                <br />
+                <span class="badge text-bg-warning" id="focusBadge">
+                    Focus Time: 
+                    <span id="focusTime"></span>
+                </span>
+            </p>
         </div>
-
-        <hr class="divider" />
-
-        <p>Pause "add site" popup</p>
-        <label class="switch">
-
-            <input type="checkbox" id="pauseAddSiteSwitch">
-            <span class="slider round">
-            </span>
-        </label>
-        <p>Focus Mode</p>
-        <label class="switch">
-            <input type="checkbox" id="focusSwitch">
-            <span class="slider round">
-            </span>
-        </label>
 
         <hr class="divider" />
 
@@ -112,7 +113,6 @@
         </div>
 
         <hr class="divider" />
-
     </div>
 </body>
 

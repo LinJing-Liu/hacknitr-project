@@ -178,8 +178,8 @@ button {
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 50px;
+    height: 30px;
 }
 
 /* Hide default HTML checkbox */
@@ -190,7 +190,7 @@ button {
 }
 
 /* The slider */
-.slider {
+.slider.round {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -202,30 +202,30 @@ button {
     transition: .4s;
 }
 
-.slider:before {
+.slider.round:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 5px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
 }
 
-input:checked+.slider {
+input:checked+.slider.round {
     background-color: #2196F3;
 }
 
-input:focus+.slider {
+input:focus+.slider.round {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked+.slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+input:checked+.slider.round:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
 }
 
 /* Rounded sliders */
@@ -235,4 +235,26 @@ input:checked+.slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+#addSiteSwitch {
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+#focusSiteSwitch {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#addSiteSwitch label {
+    margin-left: 10px;
+}
+
+#focusSiteSwitch label {
+    margin-left: 104px;
+}
+
+#focusBadge {
+    font-size: medium;
 }
