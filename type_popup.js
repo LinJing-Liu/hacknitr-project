@@ -53,6 +53,13 @@ setInterval(updateTimeLabels, 1000)
 
 chrome.storage.local.get("isFocused").then((result) => {
     document.getElementById("focusSwitch").checked = result.isFocused;
+    if (result.isFocused) {
+        document.getElementById("focusBadge").style.display = "inline-block";
+        var intervalID = setInterval(updateFocusTime, 1000)
+        chrome.storage.local.set({ intervalID: intervalID });
+    } else {
+        document.getElementById("focusBadge").style.display = "none";
+    }
 });
 
 chrome.storage.local.get("isPaused").then((result) => {
@@ -153,6 +160,14 @@ chrome.storage.local.get("recordButtonText").then((result) => {
     document.getElementById("recordButtonText").innerHTML = recordButtonTextt;
     console.log("the button state is" + recordButtonTextt);
 });
+
+function updateFocusTime() {
+    chrome.storage.local.get("elapsedTime").then((result) => {
+        var focusTime = result.elapsedTime;
+        chrome.storage.local.set({ elapsedTime : focusTime + 1});
+        document.getElementById("focusTime").innerHTML = getTimeText(focusTime);
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     var recordButton_local = document.getElementById("recordButton");
@@ -410,11 +425,17 @@ focusButton2.addEventListener('click', function () {
 
         // If the checkbox is checked, display the output text
         if (checkBox.checked == true) {
-            console.log("focus button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            chrome.storage.local.set({ isFocused: true })
+            console.log("focus button clicked")
+            document.getElementById("focusBadge").style.display = "inline-block"
+            var intervalID = setInterval(updateFocusTime, 1000)
+            chrome.storage.local.set({ isFocused: true, elapsedTime: 0, intervalID: intervalID });
         } else {
             console.log("focus button clicked");
+            document.getElementById("focusBadge").style.display = "none"
             chrome.storage.local.set({ isFocused: false })
+            chrome.storage.local.get("intervalID").then((result) => {
+                clearInterval(result.intervalID);
+            });
         }
     }
 

@@ -190,7 +190,7 @@ button {
 }
 
 /* The slider */
-.slider {
+.slider.round {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -202,7 +202,7 @@ button {
     transition: .4s;
 }
 
-.slider:before {
+.slider.round:before {
     position: absolute;
     content: "";
     height: 20px;
@@ -214,15 +214,15 @@ button {
     transition: .4s;
 }
 
-input:checked+.slider {
+input:checked+.slider.round {
     background-color: #2196F3;
 }
 
-input:focus+.slider {
+input:focus+.slider.round {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked+.slider:before {
+input:checked+.slider.round:before {
     -webkit-transform: translateX(24px);
     -ms-transform: translateX(24px);
     transform: translateX(24px);
@@ -253,4 +253,8 @@ input:checked+.slider:before {
 
 #focusSiteSwitch label {
     margin-left: 104px;
+}
+
+#focusBadge {
+    font-size: medium;
 }
