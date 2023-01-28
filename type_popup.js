@@ -242,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("didn't get curr tab yet");
             chrome.storage.local.get("currSite").then((result) => {
                 console.log("we got the current tab yayyyyyyy");
-                siteUrl = result.currSite;
 
 
                 siteDomain = result.currSite;
