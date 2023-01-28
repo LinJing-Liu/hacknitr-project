@@ -210,14 +210,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var toggleButton = document.getElementById("toggle_button_id");
 
 
-
-    pauseAddButton.addEventListener('click', function () {
-        console.log("pause button clicked");
-        chrome.storage.local.set({ isPaused: true })
-
-    });
-
-
+    /*
+        pauseAddButton.addEventListener('click', function () {
+            console.log("pause button clicked");
+            chrome.storage.local.set({ isPaused: true })
+    
+        });
+    
+    */
 
 
 
@@ -371,5 +371,42 @@ focusButton2.addEventListener('click', function () {
             difficultySection.style.display = "none";
         }
     });
+    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
+
+    pauseSwitch.addEventListener('click', function () {
+        togglePause();
+    });
+
+    var focusSwitch = document.getElementById("focusSwitch");
+
+    focusSwitch.addEventListener('click', function () {
+        toggleFocus();
+    });
+    function togglePause() {
+        // Get the checkbox
+        var checkBox = document.getElementById("pauseAddSiteSwitch");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            console.log("pause button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!! on");
+            chrome.storage.local.set({ isPaused: true })
+        } else {
+            console.log("pause button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!! off");
+            chrome.storage.local.set({ isPaused: false })
+        }
+    }
+    function toggleFocus() {
+        // Get the checkbox
+        var checkBox = document.getElementById("focusSwitch");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            console.log("focus button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            chrome.storage.local.set({ isFocused: true })
+        } else {
+            console.log("focus button clicked");
+            chrome.storage.local.set({ isFocused: false })
+        }
+    }
 
 });
