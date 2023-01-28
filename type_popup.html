@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./library/bootstrap/css/bootstrap.css">
     <script src="./library/bootstrap/js/bootstrap.js"></script>
     <script type="module" src="type_popup.js"></script>
+    <script src="notification.js"></script>
 </head>
 
 <body>
@@ -19,9 +20,11 @@
         <div class="section reportSummary">
             <h2 class="heading">Time Control and Summary</h2>
             <p class="prodTimelabel">Time on productive sites:
-            <span id="prod-time"></span> secs</p>
+                <span id="prod-time">0 secs</span>
+            </p>
             <p class="unprodTimelabel">Time on unproductive sites:
-            <span id="unprod-time"></span> secs</p>
+                <span id="unprod-time">0 secs</span>
+            </p>
             <button type="button" class="btn btn-sm btn-success" id="recordButton">
                 <span id="recordButtonText">Start</span>
             </button>
@@ -32,7 +35,8 @@
 
         <div class="section">
             <h2 class="heading piggybank">Your Productive Piggybank, Mr.BaconStrip</h2>
-            <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your money to buy accessories for Mr.BaconStrip. </p>
+            <p class="piggybank">The more time you spend being productive, the more money you will accumulate! Use your
+                money to buy accessories for Mr.BaconStrip. </p>
             <p id="amtofmoney">$00.00</p>
             <div class="moneySection">
                 <img class="pig" src="images/pig.png">
@@ -60,7 +64,7 @@
             <h2 class="heading">Site Details</h2>
             <button class="btn btn-sm btn-primary" id="addSiteButton">Add Site</button>
             <p id="addSiteSection">
-                <input class="form-control siteinput" placeholder="site domain" id="addSiteDomain"/>
+                <input class="form-control siteinput" placeholder="site domain" id="addSiteDomain" />
                 <label class="form-check-label">
                     Productive:
                     <input type="checkbox" class="form-check-input" id="addProductiveSelection"></input>
@@ -86,6 +90,30 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+        <div class="pause_features">
+            <button class="btn btn-sm btn-primary" id="pauseAddSiteButton">Pause Add Site</button>
+            <button class="btn btn-sm btn-primary" id="focusButton">Focus Mode</button>
+
+
+
+
+            <button type="button" class="btn btn-sm btn-primary" id="pauseAddSiteButton">
+                <span id="pauseButtonText">Pause Add Site Notification</span>
+                toggle lateerrrrrrrrrrrrrr
+            </button>
+
+
+
+        </div>
+
+
     </div>
 </body>
+
 </html>

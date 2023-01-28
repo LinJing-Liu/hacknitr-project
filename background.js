@@ -1,5 +1,4 @@
 //service worker, can listen to events
-
 chrome.runtime.onInstalled.addListener(() => {
   start_time = new Date();
   startTimer();
@@ -22,8 +21,12 @@ let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
+var add_site_paused = false;
+var focus_mode_on = false;
 
-chrome.storage.local.set({recordButtonText:BUTTONTEXT});
+
+
+chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
 const prompt_event = new Event("prompt");
 var lastPromptURL = null;
 
@@ -51,6 +54,8 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+chrome.storage.local.set({ isPaused: add_site_paused })
+chrome.storage.local.set({ isFocused: focus_mode_on })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -60,30 +65,55 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.unprodSites != null) {
     unproductive_sites = changes.unprodSites.newValue
   }
+  if (changes.isPaused != null) {
+    add_site_paused = changes.isPaused.newValue
+  }
+
+  if (changes.isFocused != null) {
+    focus_mode_on = changes.isFocused.newValue
+  }
 })
 
-async function update() {
 
+async function update() {
+  console.log("update is being called");
   let temp_site = await getTab();
   if (temp_site == null) {
     return;
   }
 
-  isProductiveSite(temp_site);
+  let isProd = isProductiveSite(temp_site, true);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
 
-    updateTime(time_spent, isProductiveSite(curr_site));
+    updateTime(time_spent, isProductiveSite(curr_site, false));
     curr_site = temp_site;
     start_time = end_time;
-    deficit();
+    deficit(isProd);
+  }
+  deficit_spam(isProd);
+}
+
+
+function deficit(isProd) {
+  if (points() <= 0 && (isProd == false)) {
+    gen_event_target.dispatchEvent(deficit_event);
+
+    //wait 5 sec
+    //setInterval(update, 1000);
+
+
   }
 }
 
-function deficit() {
-  if (points() <= 0) {
-    gen_event_target.dispatchEvent(deficit_event);
+function deficit_spam(isProd) {
+  if (points() <= 0 && (isProd == false && focus_mode_on)) {//how should focus mode factor in on this?
+    let curr_time = new Date().getSeconds();
+    if (curr_time % 5 == 0) {
+
+      gen_event_target.dispatchEvent(deficit_event);
+    }
   }
 }
 
@@ -93,7 +123,7 @@ function points() {
 }
 
 // need to check if has url
-function isProductiveSite(site) {
+function isProductiveSite(site, is_true_curr_site) {
   if (site == null) {
     return null;
   }
@@ -102,17 +132,12 @@ function isProductiveSite(site) {
   let unprod_filter = unproductive_sites.filter(item => site.match(item) != null);
   if (prod_filter.length > 0) { return true; }
   else if (unprod_filter.length > 0) { return false; }
-  else { return promptTimeType(); }//add more to handle null?
+  else {
+    if (add_site_paused || !is_true_curr_site) { return null; }
+    else { return promptTimeType(); }
+  }//add more to handle null?
 }
 
-//checking unproductive
-function isUnproductiveSite(site) {
-  if (site == null) {
-    return false;
-  }
-  let res = unproductive_sites.filter(item => site.match(item) != null);
-  return res.length > 0;
-}
 
 function promptTimeType() { //promise?
   //open modal box (run html)
@@ -213,4 +238,15 @@ function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
+var options = {
+  type: "basic",
+  title: "get back to work!",
+  message: "your unproductive times is greater than your productive time.",
+  iconUrl: "images/reg_icon.png"
+}
 
+chrome.notifications.create(options, callback);
+
+function callback() {
+  console.log('Popup done!')
+}
