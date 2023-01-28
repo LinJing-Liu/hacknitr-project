@@ -40,7 +40,10 @@ gen_event_target.addEventListener('deficit', async () => {
 gen_event_target.addEventListener('prompt', async () => {
   console.log("prompt event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  if (tab.url == lastPromptURL) {
+  if (tab.url == lastPromptURL/*temp_site == curr_site*/) {
+    curr_site = temp_site;
+    console.log("promp listener bool cond is wrong          :(");
+    //temp=true_curr != curr 
     return; //oishii twitter oishii doesn't work
   } else {
     lastPromptURL = tab.url;
@@ -139,13 +142,13 @@ function isProductiveSite(site, is_true_curr_site) {
     else {
       console.log("paused is off and switched sites so should ask promptTimeType()");
 
-      return promptTimeType();
+      return promptTimeType(site);
     }
   }//add more to handle null?
 }
 
 
-function promptTimeType() { //promise?
+function promptTimeType(site) { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
   console.log("prompt event dispatched in promptTimeType()");
