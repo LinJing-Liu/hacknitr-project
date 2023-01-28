@@ -207,19 +207,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var pauseAddButton = document.getElementById("pauseAddSiteButton");
     var focusButton = document.getElementById("focusButton");
+    var toggleButton = document.getElementById("toggle_button_id");
+
+
 
     pauseAddButton.addEventListener('click', function () {
         console.log("pause button clicked");
         chrome.storage.local.set({ isPaused: true })
 
     });
-    focusButton.addEventListener('click', function () {
-        console.log("focus button clicked");
-        chrome.storage.local.set({ isFocused: true })
-    });
+
+
+
+
 
 
     /*
+
+    function toggle(button) {
+        if (button.value == "OFF") {
+            button.value = "ON";
+        }
+        else {
+            button.value = "OFF";
+        }
+    }
+     var focusButton2 = document.getElementById("focusButton");
+
+focusButton2.addEventListener('click', function () {
+        console.log("focus button clicked");
+        if (button.value == "Turn on focus mode") {
+            button.value = "Turn off focus mode";
+            chrome.storage.local.set({ isFocused: true })
+        }
+        else {
+            button.value = "Turn on focus mode";
+            chrome.storage.local.set({ isFocused: false })
+        }
+
+    });
         if (siteProductive) {
             chrome.storage.local.get("prodSites").then((result) => {
                 var sites = result.prodSites;
@@ -229,6 +255,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log("Prod sites is set to: " + sites);
                 });
             });
+
+
+            function toggleFocus(button) {
+        if (button.value == "Turn on focus mode") {
+            button.value = "Turn off focus mode";
+            chrome.storage.local.set({ isFocused: true })
+        }
+        else {
+            button.value = "Turn on focus mode";
+            chrome.storage.local.set({ isFocused: false })
+        }
+    }
     */
 
 

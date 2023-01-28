@@ -1,5 +1,4 @@
 //service worker, can listen to events
-
 chrome.runtime.onInstalled.addListener(() => {
   start_time = new Date();
   startTimer();
@@ -95,6 +94,7 @@ async function update() {
   }
   deficit_spam(isProd);
 }
+
 
 function deficit(isProd) {
   if (points() <= 0 && (isProd == false)) {
