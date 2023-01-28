@@ -23,7 +23,7 @@ let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 var BUTTONTEXT = "Start";
 
-chrome.storage.local.set({recordButtonText:BUTTONTEXT});
+chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
 const prompt_event = new Event("prompt");
 var lastPromptURL = null;
 
@@ -70,15 +70,13 @@ async function update() {
   }
 
   isProductiveSite(temp_site);
-  if (curr_site != temp_site) {
-    end_time = new Date();
-    time_spent = timeCalculator(start_time, end_time);
+  end_time = new Date();
+  time_spent = timeCalculator(start_time, end_time);
 
-    updateTime(time_spent, isProductiveSite(curr_site));
-    curr_site = temp_site;
-    start_time = end_time;
-    deficit();
-  }
+  updateTime(time_spent, isProductiveSite(curr_site));
+  curr_site = temp_site;
+  start_time = end_time;
+  deficit();
 }
 
 function deficit() {
@@ -213,4 +211,3 @@ function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
-
