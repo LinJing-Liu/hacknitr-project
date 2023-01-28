@@ -70,15 +70,13 @@ async function update() {
   }
 
   isProductiveSite(temp_site);
-  if (curr_site != temp_site) {
-    end_time = new Date();
-    time_spent = timeCalculator(start_time, end_time);
+  end_time = new Date();
+  time_spent = timeCalculator(start_time, end_time);
 
-    updateTime(time_spent, isProductiveSite(curr_site));
-    curr_site = temp_site;
-    start_time = end_time;
-    deficit();
-  }
+  updateTime(time_spent, isProductiveSite(curr_site));
+  curr_site = temp_site;
+  start_time = end_time;
+  deficit();
 }
 
 function deficit() {

@@ -3,40 +3,53 @@ console.log("popup script");
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 var difficultyValue = 50;
 
-chrome.storage.local.get("prodTime").then((result) => {
-    var prodTime = result.prodTime;
-    if (prodTime == null) {
-        prodTime = 0;
+function getTimeText(seconds) {
+    if (seconds < 60) {
+        return seconds + " sec(s)";
     }
-    console.log("prodTime currently is " + prodTime);
-    document.getElementById("prod-time").innerHTML = prodTime;
-    //convert productive time into money and add to the piggy bank 60sec=$1
-    if (prodTime != 0) {
-        chrome.storage.local.get("difficultyValue").then((result) => {
-            if (result.difficultyValue == null) {
-                difficultyValue = 50;
-            } else {
-                difficultyValue = result.difficultyValue;
-            }
-            
-            //make productive time into float with 2 places after decimal 
-            var money = (prodTime / difficultyValue).toFixed(2) ;
-            var new_money= "$" + money
-            document.getElementById("amtofmoney").innerHTML= new_money;
-            document.getElementById("difficultyRange").value = difficultyValue;
-            document.getElementById("difficultyValue").innerHTML = difficultyValue;
-        });  
-    }
-});
+    var minute = Math.floor(seconds / 60);
+    return minute + " min, " + (seconds - minute * 60 ) + " sec(s)";
+}
 
-chrome.storage.local.get("unprodTime").then((result) => {
-    var unprodTime = result.unprodTime;
-    if (unprodTime == null) {
-        unprodTime = 0;
-    }
-    console.log("unprodTime currently is " + unprodTime);
-    document.getElementById("unprod-time").innerHTML = unprodTime;
-});
+function updateTimeLabels() {
+    chrome.storage.local.get("prodTime").then((result) => {
+        var prodTime = result.prodTime;
+        if (prodTime == null) {
+            prodTime = 0;
+        }
+        console.log("prodTime currently is " + prodTime);
+        document.getElementById("prod-time").innerHTML = getTimeText(prodTime);
+        //convert productive time into money and add to the piggy bank 60sec=$1
+        if (prodTime != 0) {
+            chrome.storage.local.get("difficultyValue").then((result) => {
+                if (result.difficultyValue == null) {
+                    difficultyValue = 50;
+                } else {
+                    difficultyValue = result.difficultyValue;
+                }
+                
+                //make productive time into float with 2 places after decimal 
+                var money = (prodTime / difficultyValue).toFixed(2) ;
+                var new_money= "$" + money
+                document.getElementById("amtofmoney").innerHTML= new_money;
+                document.getElementById("difficultyRange").value = difficultyValue;
+                document.getElementById("difficultyValue").innerHTML = difficultyValue;
+            });  
+        }
+    });
+
+    chrome.storage.local.get("unprodTime").then((result) => {
+        var unprodTime = result.unprodTime;
+        if (unprodTime == null) {
+            unprodTime = 0;
+        }
+        console.log("unprodTime currently is " + unprodTime);
+        document.getElementById("unprod-time").innerHTML = getTimeText(unprodTime);
+    });
+}
+
+updateTimeLabels()
+setInterval(updateTimeLabels, 1000)
 
 function getSiteContent(sites, productive) {
     let note = productive ? "p" : "up"
