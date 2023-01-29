@@ -1,4 +1,3 @@
-//service worker, can listen to events
 chrome.runtime.onInstalled.addListener(() => {
   start_time = new Date();
   startTimer();
@@ -34,33 +33,33 @@ var lastPromptURL = null;
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
+  chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
 }, false);
 
-gen_event_target.addEventListener('prompt', async () => {
+function handlePrompt() {
   console.log("prompt event triggered");
-  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  // console.log("tab.url: ");
-  // console.log(await tab.url);
-  // console.log("lastPromptURL");
-  // console.log(await lastPromptURL);
-  // console.log("temp_site");
-  // console.log(await temp_site);
-  // console.log("curr_site");
-  // console.log(await curr_site);
-  if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
-    //curr_site = temp_site;
-    console.log("promp listener bool cond is wrong :(");
-
-    //temp=true_curr != curr 
-    return; //oishii twitter oishii doesn't work
-  } else {
-    lastPromptURL = tab.url;
-    old_site = curr_site;
-    const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
-    console.log("prompt event triggered end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-  }
-}, false);
+  chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+    const tab = tabs[0];
+    // console.log("tab.url: ");
+    // console.log(await tab.url);
+    // console.log("lastPromptURL");
+    // console.log(await lastPromptURL);
+    // console.log("temp_site");
+    // console.log(await temp_site);
+    // console.log("curr_site");
+    // console.log(await curr_site);
+    if ((tab.url == null || tab.url == lastPromptURL) && old_site == tab.url) {
+      console.log("promp listener bool cond is wrong :(");
+      return; //oishii twitter oishii doesn't work
+    } else {
+      lastPromptURL = tab.url;
+      old_site = curr_site;
+      chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
+      console.log("prompt event triggered end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    }
+  });
+}
+gen_event_target.addEventListener('prompt', handlePrompt);
 
 // setting the values initially
 chrome.storage.local.set({ prodTime: prod_time })
@@ -116,11 +115,6 @@ async function update() {
 function deficit(isProd) {
   if (points() <= 0 && (isProd == false)) {
     gen_event_target.dispatchEvent(deficit_event);
-
-    //wait 5 sec
-    //setInterval(update, 1000);
-
-
   }
 }
 
@@ -154,13 +148,13 @@ function isProductiveSite(site, is_true_curr_site) {
     else {
       console.log("paused is off and switched sites so should ask promptTimeType()");
 
-      return promptTimeType(site);
+      promptTimeType();
     }
   }//add more to handle null?
 }
 
 
-function promptTimeType(site) { //promise?
+function promptTimeType() { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
   console.log("prompt event dispatched in promptTimeType()");
@@ -233,13 +227,8 @@ function updateTime(time_spent, is_prod) {
   }
 
 
-  chrome.storage.local.set({ prodTime: prod_time }).then(() => {
-    //console.log("Prod time is set to: " + prod_time);
-  });
-
-  chrome.storage.local.set({ unprodTime: unprod_time }).then(() => {
-    //console.log("Unprod time is set to: " + unprod_time);
-  });
+  chrome.storage.local.set({ prodTime: prod_time })
+  chrome.storage.local.set({ unprodTime: unprod_time })
 }
 
 // check current tab repeatedly
