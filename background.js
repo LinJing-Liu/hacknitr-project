@@ -89,7 +89,7 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.isFocused != null) {
     focus_mode_on = changes.isFocused.newValue
   }
-})
+});
 
 
 async function update() {
@@ -121,15 +121,15 @@ async function update() {
     deficit();
   }
 }
+
 function deficit() {
   console.log("points (called in deficit) = " + points());
   if ((points() <= 0) && not(isProductiveSite(curr_site) == true)) {
     console.log("if loop points<=0");
     gen_event_target.dispatchEvent(deficit_event);
     console.log("event dispatched");
-
-
-
+  }
+}
 
 function deficit_spam(isProd) {
   if (points() <= 0 && (isProd == false && focus_mode_on)) {//how should focus mode factor in on this?
@@ -171,7 +171,6 @@ function promptTimeType(site) { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
   console.log("prompt event dispatched in promptTimeType()");
-
 }
 
 function addSite(site, productive) {
@@ -279,5 +278,5 @@ chrome.notifications.create('test', options);
 chrome.notifications.create(options, callback);
 
 function callback() {
-  console.log('Popup done!')
+  console.log('Popup done!');
 }
