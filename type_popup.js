@@ -4,40 +4,67 @@ const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unpr
 var difficultyValue = 50;
 var money_total = 0
 
-chrome.storage.local.get("prodTime").then((result) => {
-    var prodTime = result.prodTime;
-    if (prodTime == null) {
-        prodTime = 0;
+function getTimeText(seconds) {
+    if (seconds < 60) {
+        return seconds + " sec(s)";
     }
-    console.log("prodTime currently is " + prodTime);
-    document.getElementById("prod-time").innerHTML = prodTime;
-    //convert productive time into money and add to the piggy bank 60sec=$1
-    if (prodTime != 0) {
-        chrome.storage.local.get("difficultyValue").then((result) => {
-            if (result.difficultyValue == null) {
-                difficultyValue = 50;
-            } else {
-                difficultyValue = result.difficultyValue;
-            }
+    var minute = Math.floor(seconds / 60);
+    return minute + " min, " + (seconds - minute * 60) + " sec(s)";
+}
 
-            //make productive time into float with 2 places after decimal 
-            var money = (prodTime / difficultyValue).toFixed(2);
-            money_total = money_total + money;
-            var new_money = "$" + money;
-            document.getElementById("amtofmoney").innerHTML = new_money;
-            document.getElementById("difficultyRange").value = difficultyValue;
-            document.getElementById("difficultyValue").innerHTML = difficultyValue;
-        });
+function updateTimeLabels() {
+    chrome.storage.local.get("prodTime").then((result) => {
+        var prodTime = result.prodTime;
+        if (prodTime == null) {
+            prodTime = 0;
+        }
+        console.log("prodTime currently is " + prodTime);
+        document.getElementById("prod-time").innerHTML = getTimeText(prodTime);
+        //convert productive time into money and add to the piggy bank 60sec=$1
+        if (prodTime != 0) {
+            chrome.storage.local.get("difficultyValue").then((result) => {
+                if (result.difficultyValue == null) {
+                    difficultyValue = 50;
+                } else {
+                    difficultyValue = result.difficultyValue;
+                }
+
+                //make productive time into float with 2 places after decimal 
+                var money = (prodTime / difficultyValue).toFixed(2);
+                var new_money = "$" + money
+                document.getElementById("amtofmoney").innerHTML = new_money;
+                document.getElementById("difficultyRange").value = difficultyValue;
+                document.getElementById("difficultyValue").innerHTML = difficultyValue;
+            });
+        }
+    });
+
+    chrome.storage.local.get("unprodTime").then((result) => {
+        var unprodTime = result.unprodTime;
+        if (unprodTime == null) {
+            unprodTime = 0;
+        }
+        console.log("unprodTime currently is " + unprodTime);
+        document.getElementById("unprod-time").innerHTML = getTimeText(unprodTime);
+    });
+}
+
+updateTimeLabels()
+setInterval(updateTimeLabels, 1000)
+
+chrome.storage.local.get("isFocused").then((result) => {
+    document.getElementById("focusSwitch").checked = result.isFocused;
+    if (result.isFocused) {
+        document.getElementById("focusBadge").style.display = "inline-block";
+        var intervalID = setInterval(updateFocusTime, 1000)
+        chrome.storage.local.set({ intervalID: intervalID });
+    } else {
+        document.getElementById("focusBadge").style.display = "none";
     }
 });
 
-chrome.storage.local.get("unprodTime").then((result) => {
-    var unprodTime = result.unprodTime;
-    if (unprodTime == null) {
-        unprodTime = 0;
-    }
-    console.log("unprodTime currently is " + unprodTime);
-    document.getElementById("unprod-time").innerHTML = unprodTime;
+chrome.storage.local.get("isPaused").then((result) => {
+    document.getElementById("pauseAddSiteSwitch").checked = result.isPaused;
 });
 
 function getSiteContent(sites, productive) {
@@ -127,53 +154,50 @@ document.getElementById("difficultySection").style.display = "none";
 // tempData saved for UI elements
 var siteDomain = "";
 var siteProductive = false;
+var useCurrentSite = false;
 var tempDifficultyValue = 50;
 
-chrome.storage.local.get("recordButtonText").then((result) => {
-    var recordButtonTextt = result.recordButtonText;
-    document.getElementById("recordButtonText").innerHTML = recordButtonTextt;
-    console.log("the button state is" + recordButtonTextt);
-});
+function updateFocusTime() {
+    chrome.storage.local.get("elapsedTime").then((result) => {
+        var focusTime = result.elapsedTime;
+        chrome.storage.local.set({ elapsedTime : focusTime + 1});
+        document.getElementById("focusTime").innerHTML = getTimeText(focusTime);
+    });
+}
+
+
+function addSite() {
+    if (!siteDomain.match(".*\..*")) {
+        alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
+        return;
+    }
+
+    if (siteProductive) {
+        chrome.storage.local.get("prodSites").then((result) => {
+            var sites = result.prodSites;
+            sites.push(siteDomain);
+
+            chrome.storage.local.set({ prodSites: sites }).then(() => {
+                console.log("Prod sites is set to: " + sites);
+            });
+        });
+    } else {
+        chrome.storage.local.get("unprodSites").then((result) => {
+            var sites = result.unprodSites;
+            sites.push(siteDomain);
+
+            chrome.storage.local.set({ unprodSites: sites }).then(() => {
+                console.log("Unprod sites is set to: " + sites);
+            });
+        });
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
-    var recordButton_local = document.getElementById("recordButton");
-    /*var recordButtonText_local = document.getElementById("recordButtonText");*/
-    chrome.storage.local.get("recordButtonText").then((result) => {
-        var recordButtonTextt = result.recordButtonText;
-        recordButton_local.addEventListener('click', function () {
-
-            if (recordButtonTextt == "Start") {
-                document.getElementById("recordButtonText").innerHTML = "Stop";
-                recordButtonTextt = "Stop";
-                chrome.storage.local.set({ recordButtonText: recordButtonTextt }).then(() => {
-                    console.log("changed button state to stop");
-                });
-
-            } else {
-                document.getElementById("recordButtonText").innerHTML = "Start";
-                recordButtonTextt = "Start";
-                chrome.storage.local.set({ recordButtonText: recordButtonTextt }).then(() => {
-                    console.log("changed button state to start");
-                });
-            }
-        });
-
-
-    }
-    );
-    /*recordButton.addEventListener('click', function() {
-        if (recordButtonText.innerHTML.toLowerCase() == "start") {
-            recordButtonText.innerHTML = "Stop";
-            
-        } else {
-            recordButtonText.innerHTML = "Start";
-        }
-    });*/
-
-
 
     var detailButton = document.getElementById("detailButton");
     var detailButtonText = document.getElementById("detailButtonText");
+
     var siteElements = [];
     for (var item of siteElementId) {
         siteElements.push(document.getElementById(item));
@@ -198,6 +222,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    var pauseAddButton = document.getElementById("pauseAddSiteButton");
+    var focusButton = document.getElementById("focusButton");
+    var toggleButton = document.getElementById("toggle_button_id");
+
     var addSiteButton = document.getElementById("addSiteButton");
     var addSection = document.getElementById("addSiteSection");
     addSiteButton.addEventListener('click', function () {
@@ -215,34 +243,27 @@ document.addEventListener('DOMContentLoaded', function () {
         siteProductive = addProdSelection.checked;
     });
 
+    var addCurrentSite = document.getElementById("addCurrentSite");
+    addCurrentSite.addEventListener('input', function () {
+        useCurrentSite = addCurrentSite.checked;
+        console.log("current site box checked /////////////")
+        console.log(useCurrentSite);
+    });
+
     var addSubmitButton = document.getElementById("addSubmitButton");
     addSubmitButton.addEventListener('click', function () {
         addSection.style.display = "none";
         addSiteButton.style.display = "inline";
-
-        if (!siteDomain.match(".*\..*")) {
-            alert("Invalid domain name for the added site. The domain name must have the format of domain name with corresponding ending, such as instagram.com");
-            return;
-        }
-
-        if (siteProductive) {
-            chrome.storage.local.get("prodSites").then((result) => {
-                var sites = result.prodSites;
-                sites.push(siteDomain);
-
-                chrome.storage.local.set({ prodSites: sites }).then(() => {
-                    console.log("Prod sites is set to: " + sites);
-                });
+        if (useCurrentSite) {
+            chrome.storage.local.get("currSite").then((result) => {
+                siteDomain = result.currSite;
+                var url = siteDomain.match(/[\w]+\.[\w]+/)[0];
+                siteDomain = url
+                console.log("add site domain - " + siteDomain);
+                addSite();
             });
         } else {
-            chrome.storage.local.get("unprodSites").then((result) => {
-                var sites = result.unprodSites;
-                sites.push(siteDomain);
-
-                chrome.storage.local.set({ unprodSites: sites }).then(() => {
-                    console.log("Unprod sites is set to: " + sites);
-                });
-            });
+            addSite();
         }
     });
 
@@ -292,40 +313,48 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-});
-
-chrome.storage.local.get("prodTime").then((result) => {
-    var prodTime = result.prodTime;
-    if (prodTime == null) {
-        prodTime = 0;
-    }
-    console.log("prodTime currently is " + prodTime);
-    document.getElementById("prod-time").innerHTML = prodTime;
-    chrome.storage.local.get("amtofmoney").then((result) => {
-        var amt_of_money = result.amtofmoney;
-        var notstring_amt = parseFloat(amt_of_money)
-        if (amt_of_money == null) {
-            amt_of_money = 5;
-        }
-        //convert productive time into money and add to the piggy bank 60sec=$1
-        if (prodTime != 0 || amt_of_money != 0) {
-            chrome.storage.local.get("difficultyValue").then((result) => {
-                if (result.difficultyValue == null) {
-                    difficultyValue = 50;
-                } else {
-                    difficultyValue = result.difficultyValue;
-                }
-
-
-                //make productive time into float with 2 places after decimal
-                //var money = (notstring_amt + (prodTime - notstring_amt / difficultyValue)).toFixed(2);
-                var money = (notstring_amt + (prodTime - notstring_amt / difficultyValue)).toFixed(2);
-                var new_money = "$" + money;
-                document.getElementById("amtofmoney").innerHTML = new_money;
-                chrome.storage.local.set({ amtofmoney: money });
-                document.getElementById("difficultyRange").value = difficultyValue;
-                document.getElementById("difficultyValue").innerHTML = difficultyValue;
-            }); po
-        }
+    var pauseSwitch = document.getElementById("pauseAddSiteSwitch");
+    pauseSwitch.addEventListener('click', function () {
+        togglePause();
     });
+
+    var focusSwitch = document.getElementById("focusSwitch");
+    focusSwitch.addEventListener('click', function () {
+        toggleFocus();
+    });
+
+    function togglePause() {
+        // Get the checkbox
+        var checkBox = document.getElementById("pauseAddSiteSwitch");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            console.log("pause button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!! on");
+            chrome.storage.local.set({ isPaused: true })
+        } else {
+            console.log("pause button clicked!!!!!!!!!!!!!!!!!!!!!!!!!!!! off");
+            chrome.storage.local.set({ isPaused: false })
+        }
+    }
+
+    function toggleFocus() {
+        // Get the checkbox
+        var checkBox = document.getElementById("focusSwitch");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            console.log("focus button clicked")
+            document.getElementById("focusBadge").style.display = "inline-block"
+            var intervalID = setInterval(updateFocusTime, 1000)
+            chrome.storage.local.set({ isFocused: true, elapsedTime: 0, intervalID: intervalID });
+        } else {
+            console.log("focus button clicked");
+            document.getElementById("focusBadge").style.display = "none"
+            chrome.storage.local.set({ isFocused: false })
+            chrome.storage.local.get("intervalID").then((result) => {
+                clearInterval(result.intervalID);
+            });
+        }
+    }
+
 });

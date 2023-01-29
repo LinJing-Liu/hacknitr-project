@@ -11,10 +11,4 @@ if (not_prod_bool && not_unpord_bool){
     const button_1 = document.createElement("button"); 
     button_1.textContent = "prod";
     button_1.classList.add("chrome-extension-button");
-
-    //parse through url and add to list
-    
-
-    //start respective timer 
-
 }

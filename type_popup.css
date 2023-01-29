@@ -6,7 +6,6 @@ body {
 
 .bodycontainer {
     padding: 15px;
-    /* background-color: #f5f5f5; */
 }
 
 .section {
@@ -17,7 +16,7 @@ h1 {
     font-size: 25px;
     text-align: center;
     color: black;
-    margin-bottom:0px;
+    margin-bottom: 0px;
 }
 
 h2 {
@@ -25,30 +24,21 @@ h2 {
     text-align: left;
 }
 
-/* .TimerStart{
-    display:grid;
-    grid-template-rows:1fr;
-    grid-template-columns:1fr 1fr;
-    margin-bottom:10%;
-    gap : 30px;
-}*/
-
-.recordButton{
-    /*grid-column:1;*/
-   display:inline;
-   position:relative;
-   width:50px; 
+.recordButton {
+    display: inline;
+    position: relative;
+    width: 50px;
 }
 
-.timericon{
+.timericon {
     display: inline;
 }
 
-.report{
-    display:block;
-    margin-top : 5px;
-    position : relative;
-    left : 160px
+.report {
+    display: block;
+    margin-top: 5px;
+    position: relative;
+    left: 160px
 }
 
 .trashImg {
@@ -58,9 +48,7 @@ h2 {
 }
 
 .site_lists {
-    /*column-count: 2;*/
     text-align: left;
-
 }
 
 .prod_site_lists {
@@ -71,7 +59,6 @@ h2 {
 button {
     color: black;
     vertical-align: middle;
-    
 }
 
 /* Clear floats after the columns */
@@ -79,19 +66,19 @@ button {
     content: "";
     display: table;
     clear: both;
-} */
+}
 
-.moneySection{
+*/ .moneySection {
     display: block;
     position: relative;
     grid-template-rows: 50px;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     bottom: 45px;
 }
 
 .piggybank {
-    position:relative;
+    position: relative;
     z-index: 5;
     margin-bottom: -10px;
     margin-top: 10px;
@@ -99,16 +86,16 @@ button {
 
 #amtofmoney {
     display: inline;
-    position: relative; 
+    position: relative;
     top: 120px;
-    left : 100px;
+    left: 100px;
     z-index: 1;
 }
 
 .pig {
-    position:relative;
+    position: relative;
     grid-column: 2;
-    z-index:0;
+    z-index: 0;
 }
 
 #title {
@@ -120,10 +107,14 @@ button {
 .heading {
     font-size: x-large;
     font-weight: 350;
-    color: #3490dc;;
+    color: #3490dc;
+    ;
 }
 
-#addSiteSection label, #addSiteSectionButtons, #addCancelButton, #addSubmitButton {
+#addSiteSection label,
+#addSiteSectionButtons,
+#addCancelButton,
+#addSubmitButton {
     margin-left: 5px;
     margin-top: 5px;
 }
@@ -152,15 +143,18 @@ button {
     float: right;
 }
 
-.sitelist #prodSiteLabel, .prodTimelabel {
+.sitelist #prodSiteLabel,
+.prodTimelabel {
     color: green;
 }
 
-.sitelist #unprodSiteLabel, .unprodTimelabel {
+.sitelist #unprodSiteLabel,
+.unprodTimelabel {
     color: rgb(192, 16, 16);
 }
 
-.prodTimelabel, .unprodTimelabel {
+.prodTimelabel,
+.unprodTimelabel {
     margin-bottom: 3px;
 
 }
@@ -175,6 +169,92 @@ button {
     font-size: medium;
 }
 
-#difficultyButton, #shopButton {
+#difficultyButton,
+#shopButton {
     margin-bottom: 6px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider.round {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider.round:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 5px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider.round {
+    background-color: #2196F3;
+}
+
+input:focus+.slider.round {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider.round:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#addSiteSwitch {
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+#focusSiteSwitch {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#addSiteSwitch label {
+    margin-left: 10px;
+}
+
+#focusSiteSwitch label {
+    margin-left: 104px;
+}
+
+#focusBadge {
+    font-size: medium;
 }

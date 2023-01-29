@@ -1,5 +1,4 @@
 //service worker, can listen to events
-
 chrome.runtime.onInstalled.addListener(() => {
   start_time = new Date();
   startTimer();
@@ -21,28 +20,47 @@ let prod_mult_factor = 1;
 let unprod_mult_factor = 1;
 let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
+var BUTTONTEXT = "Start";
+var add_site_paused = false;
+var focus_mode_on = false;
+let old_site = null;
 
-// EDIT : dictionary to make chart 
 var tabInfo = {};
+
+chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
+const prompt_event = new Event("prompt");
+var lastPromptURL = null;
 
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
-
-
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  console.log("tried to send message 0")
-  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "start" });
-  // do something with response here, not outside the function
-  console.log("tried to send message 1")
-  console.log(response);
-
-
-
-  // chrome.runtime.sendMessage('start'); /*alert("Deficit event");*/
+  const response = await chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
 }, false);
 
+gen_event_target.addEventListener('prompt', async () => {
+  console.log("prompt event triggered");
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  // console.log("tab.url: ");
+  // console.log(await tab.url);
+  // console.log("lastPromptURL");
+  // console.log(await lastPromptURL);
+  // console.log("temp_site");
+  // console.log(await temp_site);
+  // console.log("curr_site");
+  // console.log(await curr_site);
+  if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
+    //curr_site = temp_site;
+    console.log("promp listener bool cond is wrong :(");
 
-
+    //temp=true_curr != curr 
+    return; //oishii twitter oishii doesn't work
+  } else {
+    lastPromptURL = tab.url;
+    old_site = curr_site;
+    const response = await chrome.tabs.sendMessage(tab.id, { greeting: "prompt greeting" });
+    console.log("prompt event triggered end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+  }
+}, false);
 
 // setting the values initially
 chrome.storage.local.set({ prodTime: prod_time })
@@ -50,6 +68,9 @@ chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
 chrome.storage.local.set({ tabInfo: tabInfo })
+chrome.storage.local.set({ isPaused: add_site_paused })
+chrome.storage.local.set({ isFocused: focus_mode_on })
+chrome.storage.local.set({ currSite: temp_site }) //what's the right inputtt????
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -59,15 +80,24 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.unprodSites != null) {
     unproductive_sites = changes.unprodSites.newValue
   }
+  if (changes.isPaused != null) {
+    add_site_paused = changes.isPaused.newValue
+    console.log("isPaused changed---------------------------------- to: ")
+    console.log(add_site_paused)
+  }
+
+  if (changes.isFocused != null) {
+    focus_mode_on = changes.isFocused.newValue
+  }
 })
 
-async function update() {
 
+async function update() {
+  console.log("update is being called");
   let temp_site = await getTab();
   if (temp_site == null) {
     return;
   }
-  //if unprod>prod && temp_site==unproductive then display popup
 
   console.log(temp_site);
   if (curr_site != temp_site) {
@@ -101,6 +131,13 @@ function deficit() {
 
 
 
+function deficit_spam(isProd) {
+  if (points() <= 0 && (isProd == false && focus_mode_on)) {//how should focus mode factor in on this?
+    let curr_time = new Date().getSeconds();
+    if (curr_time % 5 == 0) {
+
+      gen_event_target.dispatchEvent(deficit_event);
+    }
   }
 }
 
@@ -109,15 +146,32 @@ function points() {
   return points;
 }
 
-
-
-//need to check if has url
-function isProductiveSite(site) {
+// need to check if has url
+function isProductiveSite(site, is_true_curr_site) {
   if (site == null) {
-    return false;
+    return null;
   }
-  let res = productive_sites.filter(item => site.match(item) != null);
-  return res.length > 0;
+
+  let prod_filter = productive_sites.filter(item => site.match(item) != null);
+  let unprod_filter = unproductive_sites.filter(item => site.match(item) != null);
+  if (prod_filter.length > 0) { return true; }
+  else if (unprod_filter.length > 0) { return false; }
+  else {
+    if (add_site_paused || !is_true_curr_site) { return null; }
+    else {
+      console.log("paused is off and switched sites so should ask promptTimeType()");
+
+      return promptTimeType(site);
+    }
+  }//add more to handle null?
+}
+
+
+function promptTimeType(site) { //promise?
+  //open modal box (run html)
+  gen_event_target.dispatchEvent(prompt_event);
+  console.log("prompt event dispatched in promptTimeType()");
+
 }
 
 function addSite(site, productive) {
@@ -130,12 +184,12 @@ function addSite(site, productive) {
   if (productive) {
     productive_sites.push(domain);
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
-      console.log("Prod sites is set to: " + productive_sites);
+      //console.log("Prod sites is set to: " + productive_sites);
     });
   } else {
     unproductive_sites.push(domain);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
-      console.log("Prod sites is set to: " + unproductive_sites);
+      //console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
 }
@@ -148,12 +202,12 @@ function removeSite(site, productive) {
   if (productive) {
     productive_sites = productive_sites.filter(item => item.match(site) == null);
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
-      console.log("Prod sites is set to: " + productive_sites);
+      //console.log("Prod sites is set to: " + productive_sites);
     });
   } else {
     unproductive_sites = unproductive_sites.filter(item => item.match(site) == null);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
-      console.log("Prod sites is set to: " + unproductive_sites);
+      //console.log("Prod sites is set to: " + unproductive_sites);
     });
   }
 }
@@ -183,29 +237,13 @@ function updateTime(time_spent, is_prod) {
   }
 
   chrome.storage.local.set({ prodTime: prod_time }).then(() => {
-    console.log("Prod time is set to: " + prod_time);
+    //console.log("Prod time is set to: " + prod_time);
   });
 
   chrome.storage.local.set({ unprodTime: unprod_time }).then(() => {
-    console.log("Unprod time is set to: " + unprod_time);
+    //console.log("Unprod time is set to: " + unprod_time);
   });
 }
-
-
-function promptTimeType() {
-
-}
-
-/*
-if in prod_sites then add to prod_time
-else if in unprod_sites then add to unprod time_
-else prompt user if site is in prod/unprod
-
-new Date();
-
-
-
-*/
 
 // check current tab repeatedly
 async function getTab() {
@@ -216,6 +254,8 @@ async function getTab() {
   }
 
   let url = tabs[0].url;
+  chrome.storage.local.set({ currSite: url });
+  
   // use `url` here inside the callback because it's asynchronous!
   return url;
 }
@@ -234,6 +274,10 @@ var options = {
 
 chrome.notifications.create('test', options);
 
-
 // IZZZZYYYYYYY EDITTTTTTTT
 // chrome.storage.local.set({ amtofmoney: money_piggybank })
+chrome.notifications.create(options, callback);
+
+function callback() {
+  console.log('Popup done!')
+}
