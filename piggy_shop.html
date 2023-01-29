@@ -2,8 +2,12 @@
 <html>
 
 <head>
-  <title>Beaconstrip's shop</title>
+  <title>Baconstrip's shop</title>
   <style>
+    body {
+      margin: 40px;
+    }
+
     .button {
       border: none;
       color: white;
@@ -16,38 +20,36 @@
       cursor: pointer;
     }
 
-    .button1 {
+    .button2 {
       background-color: #4CAF50;
     }
 
-    /* Green */
-    .button2 {
-      background-color: #008CBA;
+    .button1 {
+      background-color: rgb(54, 168, 255);
     }
-
-    /* Blue */
   </style>
 </head>
 
 <body>
-  <img src="images/pizza.jpg" alt="accessory 1" style="width:150px;height:150px;">
-  <button class="button button2" id="b1" onclick="myFunction()">Feed Mr.BaconStrip! (-$10)</button> <br>
-  <img src="images/light_saber.jpg" alt="accessory 2" style="width:150px;height:150px;">
-  <button class="button button2">Get Mr.Baconstrip a light saber! (-$50)</button> <br>
-  <img src="images/love.jpg" alt="accessory 3" style="width:150px;height:150px;">
-  <button class="button button1">Tell Mr.Baconstrip you love him by being productive! (-$0) </button>
+  <h3>Level- 1</h3>
+  <img src="images/shop_pig_1.png" alt="accessory 1" style="width:150px;height:150px;">
+  <button class="button button2" id="b1" onclick="myFunction()">Collect $10 to unlock Mr. Baconstrip's cowboy hat!</button> <br>
 
-  <script>
-    let button1 = document.querySelector(".button button2");
-    button1.addEventListener("click", button1fun);
-    var x = type_popup.js.amt_of_money; //variable from the type_popup.js 
+  <h3>Level- 2</h3>
+  <img src="images/shop_pig_2.png" alt="accessory 2" style="width:150px;height:150px;">
+  <button class="button button2">Collect $20 to unlock Mr. Baconstrip's favourite light saber! </button> <br>
 
-    function button1fun() {
-      x = x - 20;
-    }
+  <h3>Level- 3</h3>
+  <img src="images/shop_pig_3.png" alt="accessory 3" style="width:150px;height:150px;">
+  <button class="button button1">Collect $50 to unlock Mr. Baconstrip's pet robot R2D2!</button><br>
 
-  </script>
+  <h3>Level- 4</h3>
+  <img src="images/shop_pig_4.png" alt="accessory 4" style="width:150px;height:150px;">
+  <button class="button button1"> Mr. Baconstrip is hungry after watching you work so hard. Collect $100 to unlock his favourite treat: an ice cream sundae!</button><br>
 
+  <h3>Level- 5</h3>
+  <img src="images/shop_pig_5.png" alt="accessory 5" style="width:150px;height:150px;">
+  <button class="button button1">Collect $500 to unlock Mr. Baconstrip's distinguished-gentleman-glasses!</button><br>
 </body>
 
 </html>

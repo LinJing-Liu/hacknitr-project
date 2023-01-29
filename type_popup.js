@@ -2,6 +2,8 @@ console.log("popup script");
 
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 var difficultyValue = 50;
+const img_array_level = ["images/pig.png", "images/pig_level1(extra).png", "images/pig_level2(extra).png", "images/pig_level3.png", "images/pig_level4.png", "images/pig_level5.png"];
+var temp = 0;
 var money_total = 0
 
 function getTimeText(seconds) {
@@ -35,6 +37,24 @@ function updateTimeLabels() {
                 document.getElementById("amtofmoney").innerHTML = new_money;
                 document.getElementById("difficultyRange").value = difficultyValue;
                 document.getElementById("difficultyValue").innerHTML = difficultyValue;
+            });
+        }
+
+        if ((prodTime == 10 && prodTime != temp) || (prodTime == 25 && prodTime != temp) || (prodTime == 60 && prodTime != temp) || (prodTime == 500 && prodTime != temp) || (prodTime == 1000 && prodTime != temp) || (prodTime == 10000 && prodTime != temp)) {
+            temp = prodTime;
+            chrome.storage.local.get("Level").then((result) => {
+                var level = result.Level;
+                if (level == null) {
+                    Level = 0;
+                    level = 0;
+                }
+                var new_level = level + 1;
+                if (new_level > 5) {
+                    new_level = 5;
+                }
+                chrome.storage.local.set({ Level: new_level });
+
+                document.getElementById("pig").src = img_array_level[new_level]//img_array_level[1]
             });
         }
     });
@@ -160,7 +180,7 @@ var tempDifficultyValue = 50;
 function updateFocusTime() {
     chrome.storage.local.get("elapsedTime").then((result) => {
         var focusTime = result.elapsedTime;
-        chrome.storage.local.set({ elapsedTime : focusTime + 1});
+        chrome.storage.local.set({ elapsedTime: focusTime + 1 });
         document.getElementById("focusTime").innerHTML = getTimeText(focusTime);
     });
 }
