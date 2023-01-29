@@ -2,6 +2,7 @@ console.log("popup script");
 
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 var difficultyValue = 50;
+var money_total = 0
 
 function getTimeText(seconds) {
     if (seconds < 60) {
@@ -293,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var reportButton = document.getElementById("reportButton");
     reportButton.addEventListener('click', function () {
-        window.open("container.html", '_blank').focus();
+        window.open("barchart.html", '_blank').focus();
     });
 
     var difficultySection = document.getElementById("difficultySection");

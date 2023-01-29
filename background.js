@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(() => {
 var productive_sites = ["canvas.cornell.edu", "mail.google.com", "drive.google.com", "docs.google.com",
   "stackoverflow.com", "github.com", "leetcode.com", "w3schools.com"];
 var unproductive_sites = ["twitter.com", "facebook.com", "reddit.com",
-  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com", "google.com", "https://bonsaisushiny.com/"];
+  "instagram.com", "netflix.com", "hulu.com", "hbomax.com", "disneyplus.com", "youtube.com"];
 let prod_time = 0; //seconds
 let unprod_time = 0; //seconds
 let prev_date = null;
@@ -25,7 +25,7 @@ var add_site_paused = false;
 var focus_mode_on = false;
 let old_site = null;
 
-
+var tabInfo = {};
 
 chrome.storage.local.set({ recordButtonText: BUTTONTEXT });
 const prompt_event = new Event("prompt");
@@ -67,6 +67,7 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+chrome.storage.local.set({ tabInfo: tabInfo })
 chrome.storage.local.set({ isPaused: add_site_paused })
 chrome.storage.local.set({ isFocused: focus_mode_on })
 chrome.storage.local.set({ currSite: temp_site }) //what's the right inputtt????
@@ -88,7 +89,7 @@ chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.isFocused != null) {
     focus_mode_on = changes.isFocused.newValue
   }
-})
+});
 
 
 async function update() {
@@ -98,29 +99,35 @@ async function update() {
     return;
   }
 
-  let isProd = isProductiveSite(temp_site, true);
+  console.log(temp_site);
   if (curr_site != temp_site) {
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
+    updateTime(time_spent, isProductiveSite(curr_site));
 
-    updateTime(time_spent, isProductiveSite(curr_site, false));
-    old_site = curr_site;
+    if (curr_site != null && time_spent != 0) {
+      var new_site = curr_site.match(/[\w]+\.[\w]+/);
+      if (tabInfo[new_site] != null) {
+        tabInfo[new_site] = tabInfo[new_site] + time_spent;
+      } else {
+        tabInfo[new_site] = time_spent;
+      }
+      chrome.storage.local.set({ tabInfo: tabInfo });
+    }
     curr_site = temp_site;
     start_time = end_time;
-    deficit(isProd);
+    console.log("unprod_time = " + unprod_time);
+    console.log("prod_time = " + prod_time);
+    deficit();
   }
-  deficit_spam(isProd);
 }
 
-
-function deficit(isProd) {
-  if (points() <= 0 && (isProd == false)) {
+function deficit() {
+  console.log("points (called in deficit) = " + points());
+  if ((points() <= 0) && !(isProductiveSite(curr_site) == true)) {
+    console.log("if loop points<=0");
     gen_event_target.dispatchEvent(deficit_event);
-
-    //wait 5 sec
-    //setInterval(update, 1000);
-
-
+    console.log("event dispatched");
   }
 }
 
@@ -164,7 +171,6 @@ function promptTimeType(site) { //promise?
   //open modal box (run html)
   gen_event_target.dispatchEvent(prompt_event);
   console.log("prompt event dispatched in promptTimeType()");
-
 }
 
 function addSite(site, productive) {
@@ -179,7 +185,7 @@ function addSite(site, productive) {
     chrome.storage.local.set({ prodSites: productive_sites }).then(() => {
       //console.log("Prod sites is set to: " + productive_sites);
     });
-  } else if (productive == false) {
+  } else {
     unproductive_sites.push(domain);
     chrome.storage.local.set({ unprodSites: unproductive_sites }).then(() => {
       //console.log("Prod sites is set to: " + unproductive_sites);
@@ -221,17 +227,13 @@ function timeCalculator(in_time, out_time) {
 }
 
 function updateTime(time_spent, is_prod) {
-
-  if (is_prod == null) {
-  }
-
-  else if (is_prod) {
+  //update_tab()
+  if (is_prod) {
     prod_time += time_spent;
   }
-  else if (!is_prod) {
+  else {
     unprod_time += time_spent;
   }
-
 
   chrome.storage.local.set({ prodTime: prod_time }).then(() => {
     //console.log("Prod time is set to: " + prod_time);
@@ -261,15 +263,20 @@ function startTimer() {
   console.log("start timer");
   setInterval(update, 1000);
 }
+
 var options = {
   type: "basic",
   title: "get back to work!",
   message: "your unproductive times is greater than your productive time.",
   iconUrl: "images/reg_icon.png"
-}
+};
 
+chrome.notifications.create('test', options);
+
+// IZZZZYYYYYYY EDITTTTTTTT
+// chrome.storage.local.set({ amtofmoney: money_piggybank })
 chrome.notifications.create(options, callback);
 
 function callback() {
-  console.log('Popup done!')
+  console.log('Popup done!');
 }
