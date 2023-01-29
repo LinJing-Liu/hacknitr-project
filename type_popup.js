@@ -39,7 +39,7 @@ function updateTimeLabels() {
             });
         }
 
-        if ((prodTime == 10 && prodTime != temp) || (prodTime == 25 && prodTime != temp) || (prodTime == 35 && prodTime != temp) || (prodTime == 45 && prodTime != temp) || (prodTime == 50 && prodTime != temp) || (prodTime == 500 && prodTime != temp)) {
+        if ((prodTime == 10 && prodTime != temp) || (prodTime == 25 && prodTime != temp) || (prodTime == 60 && prodTime != temp) || (prodTime == 500 && prodTime != temp) || (prodTime == 1000 && prodTime != temp) || (prodTime == 10000 && prodTime != temp)) {
             temp = prodTime;
             chrome.storage.local.get("Level").then((result) => {
                 var level = result.Level;
