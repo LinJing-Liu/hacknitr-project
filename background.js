@@ -24,6 +24,7 @@ var BUTTONTEXT = "Start";
 var add_site_paused = false;
 var focus_mode_on = false;
 let old_site = null;
+let level = 0;
 
 
 
@@ -70,6 +71,7 @@ chrome.storage.local.set({ unprodSites: unproductive_sites })
 chrome.storage.local.set({ isPaused: add_site_paused })
 chrome.storage.local.set({ isFocused: focus_mode_on })
 chrome.storage.local.set({ currSite: temp_site }) //what's the right inputtt????
+chrome.storage.local.set({ Level: level })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -252,7 +254,7 @@ async function getTab() {
 
   let url = tabs[0].url;
   chrome.storage.local.set({ currSite: url });
-  
+
   // use `url` here inside the callback because it's asynchronous!
   return url;
 }
