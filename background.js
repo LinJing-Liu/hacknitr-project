@@ -30,6 +30,7 @@ for (var i in productive_sites) {
 for (var j in unproductive_sites) {
   tab_info[j] = 0;
 }
+
 const x_axis = Object.keys(tab_info);
 const y_axis = Object.values(tab_info);
 
@@ -58,6 +59,8 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
+chrome.storage.local.set({ xaxis: x_axis })
+chrome.storage.local.set({ yaxis: y_axis })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {

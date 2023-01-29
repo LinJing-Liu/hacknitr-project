@@ -1,4 +1,5 @@
 # Flask application to work with js variable in python
+from webbrowser import BackgroundBrowser
 from matplotlib import pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -18,9 +19,11 @@ def index():
 # Import statements
 
 
+BackgroundBrowser.js.prod_time
+
 # Getting data
-productive_timer_data = 50  # change_variable
-un_productive_timer_data = 50  # change_Variable
+productive_timer_data = BackgroundBrowser.js.prod_time  # change_variable
+un_productive_timer_data = BackgroundBrowser.js.unprod_time  # change_Variable
 my_data = [productive_timer_data, un_productive_timer_data]
 my_labels = ['productive', 'unproductive']
 
