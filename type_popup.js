@@ -2,7 +2,7 @@ console.log("popup script");
 
 const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unprodSiteList"];
 var difficultyValue = 50;
-const img_array_level = ["images/pig.png", "images/pig2.png", "images/pig3.png", "images/pig4.png", "images/pig5.png", "images/pig6.png"];
+const img_array_level = ["images/pig.png", "images/pig_level1(extra).png", "images/pig_level2(extra).png", "images/pig_level3.png", "images/pig_level4.png", "images/pig_level5.png"];
 var temp = 0;
 
 function getTimeText(seconds) {
@@ -39,7 +39,7 @@ function updateTimeLabels() {
             });
         }
 
-        if ((prodTime == 60 && prodTime != temp) || (prodTime == 100 && prodTime != temp) || (prodTime == 300 && prodTime != temp) || (prodTime == 500 && prodTime != temp) || (prodTime == 1000 && prodTime != temp) || (prodTime == 2000 && prodTime != temp)) {
+        if ((prodTime == 10 && prodTime != temp) || (prodTime == 25 && prodTime != temp) || (prodTime == 300 && prodTime != temp) || (prodTime == 500 && prodTime != temp) || (prodTime == 1000 && prodTime != temp) || (prodTime == 2000 && prodTime != temp)) {
             temp = prodTime;
             chrome.storage.local.get("Level").then((result) => {
                 var level = result.Level;
