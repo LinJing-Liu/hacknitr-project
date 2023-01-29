@@ -156,12 +156,6 @@ var siteProductive = false;
 var useCurrentSite = false;
 var tempDifficultyValue = 50;
 
-chrome.storage.local.get("recordButtonText").then((result) => {
-    var recordButtonTextt = result.recordButtonText;
-    document.getElementById("recordButtonText").innerHTML = recordButtonTextt;
-    console.log("the button state is" + recordButtonTextt);
-});
-
 function updateFocusTime() {
     chrome.storage.local.get("elapsedTime").then((result) => {
         var focusTime = result.elapsedTime;
@@ -199,35 +193,9 @@ function addSite() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var recordButton_local = document.getElementById("recordButton");
-    chrome.storage.local.get("recordButtonText").then((result) => {
-        var recordButtonTextt = result.recordButtonText;
-        recordButton_local.addEventListener('click', function () {
-
-            if (recordButtonTextt == "Start") {
-                document.getElementById("recordButtonText").innerHTML = "Stop";
-                recordButtonTextt = "Stop";
-                chrome.storage.local.set({ recordButtonText: recordButtonTextt }).then(() => {
-                    console.log("changed button state to stop");
-                });
-
-            } else {
-                document.getElementById("recordButtonText").innerHTML = "Start";
-                recordButtonTextt = "Start";
-                chrome.storage.local.set({ recordButtonText: recordButtonTextt }).then(() => {
-                    console.log("changed button state to start");
-                });
-            }
-        });
-
-
-    }
-    );
 
     var detailButton = document.getElementById("detailButton");
     var detailButtonText = document.getElementById("detailButtonText");
-
-
 
     var siteElements = [];
     for (var item of siteElementId) {
@@ -237,8 +205,6 @@ document.addEventListener('DOMContentLoaded', function () {
     for (var ele of siteElements) {
         ele.style.display = "none";
     }
-
-
 
     detailButton.addEventListener('click', function () {
         console.log(detailButtonText.innerHTML.toLowerCase());
@@ -254,10 +220,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
     var pauseAddButton = document.getElementById("pauseAddSiteButton");
     var focusButton = document.getElementById("focusButton");
     var toggleButton = document.getElementById("toggle_button_id");
-
 
     var addSiteButton = document.getElementById("addSiteButton");
     var addSection = document.getElementById("addSiteSection");

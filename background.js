@@ -35,20 +35,19 @@ gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   const response = await chrome.tabs.sendMessage(tab.id, { greeting: "deficit greeting" });
-  //console.log(response);
 }, false);
 
 gen_event_target.addEventListener('prompt', async () => {
   console.log("prompt event triggered");
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  console.log("tab.url: ");
-  console.log(await tab.url);
-  console.log("lastPromptURL");
-  console.log(await lastPromptURL);
-  console.log("temp_site");
-  console.log(await temp_site);
-  console.log("curr_site");
-  console.log(await curr_site);
+  // console.log("tab.url: ");
+  // console.log(await tab.url);
+  // console.log("lastPromptURL");
+  // console.log(await lastPromptURL);
+  // console.log("temp_site");
+  // console.log(await temp_site);
+  // console.log("curr_site");
+  // console.log(await curr_site);
   if (tab.url == lastPromptURL && old_site == tab.url/*&& temp_site == curr_site*/) {
     //curr_site = temp_site;
     console.log("promp listener bool cond is wrong :(");
