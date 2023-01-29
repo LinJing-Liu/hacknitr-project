@@ -124,7 +124,7 @@ async function update() {
 
 function deficit() {
   console.log("points (called in deficit) = " + points());
-  if ((points() <= 0) && not(isProductiveSite(curr_site) == true)) {
+  if ((points() <= 0) && !(isProductiveSite(curr_site) == true)) {
     console.log("if loop points<=0");
     gen_event_target.dispatchEvent(deficit_event);
     console.log("event dispatched");
