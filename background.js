@@ -23,17 +23,7 @@ let gen_event_target = new EventTarget();
 const deficit_event = new Event("deficit");
 
 // EDIT : dictionary to make chart 
-var tab_info = {};
-for (var i in productive_sites) {
-  tab_info[i] = 0;
-}
-for (var j in unproductive_sites) {
-  tab_info[j] = 0;
-}
-
-const x_axis = Object.keys(tab_info);
-const y_axis = Object.values(tab_info);
-
+var tabInfo = {};
 
 gen_event_target.addEventListener('deficit', async () => {
   console.log("deficit event triggered");
@@ -59,8 +49,7 @@ chrome.storage.local.set({ prodTime: prod_time })
 chrome.storage.local.set({ unprodTime: unprod_time })
 chrome.storage.local.set({ prodSites: productive_sites })
 chrome.storage.local.set({ unprodSites: unproductive_sites })
-chrome.storage.local.set({ xaxis: x_axis })
-chrome.storage.local.set({ yaxis: y_axis })
+chrome.storage.local.set({ tabInfo: tabInfo })
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
   if (changes.prodSites != null) {
@@ -82,11 +71,19 @@ async function update() {
 
   console.log(temp_site);
   if (curr_site != temp_site) {
-
     end_time = new Date();
     time_spent = timeCalculator(start_time, end_time);
     updateTime(time_spent, isProductiveSite(curr_site));
-    tab_info[curr_site] = tab_info[curr_site] + time_spent;
+
+    if (curr_site != null && time_spent != 0) {
+      var new_site = curr_site.match(/[\w]+\.[\w]+/);
+      if (tabInfo[new_site] != null) {
+        tabInfo[new_site] = tabInfo[new_site] + time_spent;
+      } else {
+        tabInfo[new_site] = time_spent;
+      }
+      chrome.storage.local.set({ tabInfo: tabInfo });
+    }
     curr_site = temp_site;
     start_time = end_time;
     console.log("unprod_time = " + unprod_time);
@@ -239,4 +236,4 @@ chrome.notifications.create('test', options);
 
 
 // IZZZZYYYYYYY EDITTTTTTTT
-chrome.storage.local.set({ amtofmoney: money_piggybank })
+// chrome.storage.local.set({ amtofmoney: money_piggybank })

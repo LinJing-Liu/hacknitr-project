@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var reportButton = document.getElementById("reportButton");
     reportButton.addEventListener('click', function () {
-        window.open("container.html", '_blank').focus();
+        window.open("barchart.html", '_blank').focus();
     });
 
     var difficultySection = document.getElementById("difficultySection");
