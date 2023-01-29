@@ -4,6 +4,7 @@ const siteElementId = ["prodSiteLabel", "prodSiteList", "unprodSiteLabel", "unpr
 var difficultyValue = 50;
 const img_array_level = ["images/pig.png", "images/pig_level1(extra).png", "images/pig_level2(extra).png", "images/pig_level3.png", "images/pig_level4.png", "images/pig_level5.png"];
 var temp = 0;
+var money_total = 0
 
 function getTimeText(seconds) {
     if (seconds < 60) {
@@ -313,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var reportButton = document.getElementById("reportButton");
     reportButton.addEventListener('click', function () {
-        window.open("container.html", '_blank').focus();
+        window.open("barchart.html", '_blank').focus();
     });
 
     var difficultySection = document.getElementById("difficultySection");
